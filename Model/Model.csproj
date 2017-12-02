@@ -109,7 +109,6 @@
       <LastGenOutput>ModelOfSales.Context.cs</LastGenOutput>
       <DependentUpon>ModelOfSales.edmx</DependentUpon>
     </Content>
-    <Content Include="ModelOfSales.edmx.sql" />
     <Content Include="ModelOfSales.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ModelOfSales.cs</LastGenOutput>
