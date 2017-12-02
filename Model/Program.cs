@@ -1,0 +1,33 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Model
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            using (ModelOfSalesContainer db = new ModelOfSalesContainer())
+            {
+                Client test = new Client{ ClientId = 77, Name = "Dzianis" };
+                db.ClientSet.Add(test);
+                Manager test2 = new Manager{ ManagerId = 88, LastName = "Tarasevich", Name = "Sergey" };
+                db.ManagerSet.Add(test2);
+                Product test3 = new Product{ Name = "Apple", Price = 100500, ProductId = 2017 };
+                db.ProductSet.Add(test3);
+                SaleInfo test4 = new SaleInfo{ClientId = test.ClientId, ManagerId = test2.ManagerId, ProductId = test3.ProductId, DateOfSale = DateTime.Now};
+                db.SaleInfoSet.Add(test4);
+                db.SaveChanges();
+
+                foreach (var item in db.SaleInfoSet)
+                {
+                    Console.WriteLine(item.Client.Name + item.Manager.Name + item.Product.Name);
+                }
+            }
+            Console.ReadKey();
+        }
+    }
+}

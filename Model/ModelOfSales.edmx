@@ -1,0 +1,257 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ModelOfSales.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="ModelOfSalesStoreContainer">
+    <EntitySet Name="SaleInfoSet" EntityType="ModelOfSales.Store.SaleInfoSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="ProductSet" EntityType="ModelOfSales.Store.ProductSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="ClientSet" EntityType="ModelOfSales.Store.ClientSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="ManagerSet" EntityType="ModelOfSales.Store.ManagerSet" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="ProductSaleInfo" Association="ModelOfSales.Store.ProductSaleInfo">
+      <End Role="Product" EntitySet="ProductSet" />
+      <End Role="SaleInfo" EntitySet="SaleInfoSet" />
+    </AssociationSet>
+    <AssociationSet Name="ClientSaleInfo" Association="ModelOfSales.Store.ClientSaleInfo">
+      <End Role="Client" EntitySet="ClientSet" />
+      <End Role="SaleInfo" EntitySet="SaleInfoSet" />
+    </AssociationSet>
+    <AssociationSet Name="ManagerSaleInfo" Association="ModelOfSales.Store.ManagerSaleInfo">
+      <End Role="Manager" EntitySet="ManagerSet" />
+      <End Role="SaleInfo" EntitySet="SaleInfoSet" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="SaleInfoSet">
+    <Key>
+      <PropertyRef Name="SaleInfoId" />
+    </Key>
+    <Property Name="SaleInfoId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ProductId" Type="int" Nullable="false" />
+    <Property Name="ClientId" Type="int" Nullable="false" />
+    <Property Name="ManagerId" Type="int" Nullable="false" />
+    <Property Name="DateOfSale" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ProductSet">
+    <Key>
+      <PropertyRef Name="ProductId" />
+    </Key>
+    <Property Name="ProductId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Price" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ClientSet">
+    <Key>
+      <PropertyRef Name="ClientId" />
+    </Key>
+    <Property Name="ClientId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ManagerSet">
+    <Key>
+      <PropertyRef Name="ManagerId" />
+    </Key>
+    <Property Name="ManagerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="LastName" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <Association Name="ProductSaleInfo">
+    <End Role="Product" Type="ModelOfSales.Store.ProductSet" Multiplicity="1" />
+    <End Role="SaleInfo" Type="ModelOfSales.Store.SaleInfoSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="ProductId" />
+      </Principal>
+      <Dependent Role="SaleInfo">
+        <PropertyRef Name="ProductId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ClientSaleInfo">
+    <End Role="Client" Type="ModelOfSales.Store.ClientSet" Multiplicity="1" />
+    <End Role="SaleInfo" Type="ModelOfSales.Store.SaleInfoSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Client">
+        <PropertyRef Name="ClientId" />
+      </Principal>
+      <Dependent Role="SaleInfo">
+        <PropertyRef Name="ClientId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ManagerSaleInfo">
+    <End Role="Manager" Type="ModelOfSales.Store.ManagerSet" Multiplicity="1" />
+    <End Role="SaleInfo" Type="ModelOfSales.Store.SaleInfoSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Manager">
+        <PropertyRef Name="ManagerId" />
+      </Principal>
+      <Dependent Role="SaleInfo">
+        <PropertyRef Name="ManagerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="ModelOfSales" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="ModelOfSalesContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="SaleInfoSet" EntityType="ModelOfSales.SaleInfo" />
+          <EntitySet Name="ProductSet" EntityType="ModelOfSales.Product" />
+          <EntitySet Name="ClientSet" EntityType="ModelOfSales.Client" />
+          <EntitySet Name="ManagerSet" EntityType="ModelOfSales.Manager" />
+          <AssociationSet Name="ProductSaleInfo" Association="ModelOfSales.ProductSaleInfo">
+            <End Role="Product" EntitySet="ProductSet" />
+            <End Role="SaleInfo" EntitySet="SaleInfoSet" />
+          </AssociationSet>
+          <AssociationSet Name="ClientSaleInfo" Association="ModelOfSales.ClientSaleInfo">
+            <End Role="Client" EntitySet="ClientSet" />
+            <End Role="SaleInfo" EntitySet="SaleInfoSet" />
+          </AssociationSet>
+          <AssociationSet Name="ManagerSaleInfo" Association="ModelOfSales.ManagerSaleInfo">
+            <End Role="Manager" EntitySet="ManagerSet" />
+            <End Role="SaleInfo" EntitySet="SaleInfoSet" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="SaleInfo">
+          <Key>
+            <PropertyRef Name="SaleInfoId" />
+          </Key>
+          <Property Name="SaleInfoId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductId" Type="Int32" Nullable="false" />
+          <Property Name="ClientId" Type="Int32" Nullable="false" />
+          <Property Name="ManagerId" Type="Int32" Nullable="false" />
+          <Property Name="DateOfSale" Type="DateTime" Nullable="false" />
+          <NavigationProperty Name="Product" Relationship="ModelOfSales.ProductSaleInfo" FromRole="SaleInfo" ToRole="Product" />
+          <NavigationProperty Name="Client" Relationship="ModelOfSales.ClientSaleInfo" FromRole="SaleInfo" ToRole="Client" />
+          <NavigationProperty Name="Manager" Relationship="ModelOfSales.ManagerSaleInfo" FromRole="SaleInfo" ToRole="Manager" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ProductId" />
+          </Key>
+          <Property Name="ProductId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="Price" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="SaleInfo" Relationship="ModelOfSales.ProductSaleInfo" FromRole="Product" ToRole="SaleInfo" />
+        </EntityType>
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="ClientId" />
+          </Key>
+          <Property Name="ClientId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <NavigationProperty Name="SaleInfo" Relationship="ModelOfSales.ClientSaleInfo" FromRole="Client" ToRole="SaleInfo" />
+        </EntityType>
+        <EntityType Name="Manager">
+          <Key>
+            <PropertyRef Name="ManagerId" />
+          </Key>
+          <Property Name="ManagerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="LastName" Type="String" Nullable="false" />
+          <NavigationProperty Name="SaleInfo" Relationship="ModelOfSales.ManagerSaleInfo" FromRole="Manager" ToRole="SaleInfo" />
+        </EntityType>
+        <Association Name="ProductSaleInfo">
+          <End Type="ModelOfSales.Product" Role="Product" Multiplicity="1" />
+          <End Type="ModelOfSales.SaleInfo" Role="SaleInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="SaleInfo">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ClientSaleInfo">
+          <End Type="ModelOfSales.Client" Role="Client" Multiplicity="1" />
+          <End Type="ModelOfSales.SaleInfo" Role="SaleInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="ClientId" />
+            </Principal>
+            <Dependent Role="SaleInfo">
+              <PropertyRef Name="ClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ManagerSaleInfo">
+          <End Type="ModelOfSales.Manager" Role="Manager" Multiplicity="1" />
+          <End Type="ModelOfSales.SaleInfo" Role="SaleInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Manager">
+              <PropertyRef Name="ManagerId" />
+            </Principal>
+            <Dependent Role="SaleInfo">
+              <PropertyRef Name="ManagerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ModelOfSalesStoreContainer" CdmEntityContainer="ModelOfSalesContainer">
+    <EntitySetMapping Name="SaleInfoSet">
+      <EntityTypeMapping TypeName="IsTypeOf(ModelOfSales.SaleInfo)">
+        <MappingFragment StoreEntitySet="SaleInfoSet">
+          <ScalarProperty Name="SaleInfoId" ColumnName="SaleInfoId" />
+          <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+          <ScalarProperty Name="ClientId" ColumnName="ClientId" />
+          <ScalarProperty Name="ManagerId" ColumnName="ManagerId" />
+          <ScalarProperty Name="DateOfSale" ColumnName="DateOfSale" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProductSet">
+      <EntityTypeMapping TypeName="IsTypeOf(ModelOfSales.Product)">
+        <MappingFragment StoreEntitySet="ProductSet">
+          <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Price" ColumnName="Price" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ClientSet">
+      <EntityTypeMapping TypeName="IsTypeOf(ModelOfSales.Client)">
+        <MappingFragment StoreEntitySet="ClientSet">
+          <ScalarProperty Name="ClientId" ColumnName="ClientId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ManagerSet">
+      <EntityTypeMapping TypeName="IsTypeOf(ModelOfSales.Manager)">
+        <MappingFragment StoreEntitySet="ManagerSet">
+          <ScalarProperty Name="ManagerId" ColumnName="ManagerId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
