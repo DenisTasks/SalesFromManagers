@@ -1,0 +1,79 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Model;
+using AutoMapper;
+using DAL.Interfaces;
+
+namespace DAL.Repositories
+{
+    public class ClientRepository : ICreateRepository<DAL.Models.Client, Model.Client>
+    {
+        private readonly ModelOfSalesContainer _modelOfSalesContainer;
+        public ClientRepository()
+        {
+            _modelOfSalesContainer = new ModelOfSalesContainer();
+        }
+
+        public void Create(DAL.Models.Client itemClient)
+        {
+            Mapper.Initialize(cfg => cfg.CreateMap<DAL.Models.Client, Model.Client>()
+                .ForMember("Name", opt => opt.MapFrom(c => c.Name)));
+            Model.Client client = Mapper.Map<DAL.Models.Client, Model.Client>(itemClient);
+            _modelOfSalesContainer.ClientSet.Add(client);
+        }
+
+        public Model.Client FindById(int id)
+        {
+            Model.Client client = _modelOfSalesContainer.ClientSet.FirstOrDefault(x => x.ClientId == id);
+            return client;
+        }
+
+        public Model.Client FindByEntity(DAL.Models.Client itemClient)
+        {
+            return _modelOfSalesContainer.ClientSet.FirstOrDefault(c => c.Name == itemClient.Name);
+        }
+
+        public IEnumerable<Model.Client> Read()
+        {
+            return _modelOfSalesContainer.ClientSet.AsNoTracking();
+        }
+        public void Update(DAL.Models.Client itemClient)
+        {
+            Model.Client client =
+                this._modelOfSalesContainer.ClientSet.FirstOrDefault(c => c.ClientId == itemClient.ClientId);
+            if (client != null)
+            {
+                client.Name = itemClient.Name;
+            }
+            else
+            {
+                throw new ArgumentException("This client ID not found!");
+            }
+        }
+        public void Delete(DAL.Models.Client itemClient)
+        {
+            Model.Client client =
+                _modelOfSalesContainer.ClientSet.FirstOrDefault(c => c.ClientId == itemClient.ClientId);
+            if (client != null)
+            {
+                _modelOfSalesContainer.ClientSet.Remove(client);
+            }
+            else
+            {
+                throw new ArgumentException("This client ID not found!");
+            }
+        }
+        public void SaveChanges()
+        {
+            _modelOfSalesContainer.SaveChanges();
+        }
+        public void Dispose()
+        {
+            _modelOfSalesContainer.Dispose();
+            GC.SuppressFinalize(this);
+        }
+    }
+}
