@@ -12,6 +12,6 @@ namespace DAL.Models
         public int ProductId { get; set; }
         public int ClientId { get; set; }
         public int ManagerId { get; set; }
-        public System.DateTime DateOfSale { get; set; }
+        public string DateOfSale { get; set; }
     }
 }

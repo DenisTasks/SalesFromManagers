@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,10 +20,9 @@ namespace DAL.Repositories
 
         public void Create(DAL.Models.Manager itemManager)
         {
-            Mapper.Initialize(cfg => cfg.CreateMap<DAL.Models.Manager, Model.Manager>()
-                .ForMember("Name", opt => opt.MapFrom(m => m.Name))
-                .ForMember("LastName", opt => opt.MapFrom(m => m.LastName)));
-            Model.Manager manager = Mapper.Map<DAL.Models.Manager, Model.Manager>(itemManager);
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<DAL.Models.Manager, Model.Manager>()
+                .ForMember("LastName", opt => opt.MapFrom(m => m.LastName))).CreateMapper();
+            Model.Manager manager = mapper.Map<DAL.Models.Manager, Model.Manager>(itemManager);
             _modelOfSalesContainer.ManagerSet.Add(manager);
         }
 
@@ -34,7 +34,7 @@ namespace DAL.Repositories
 
         public Model.Manager FindByEntity(DAL.Models.Manager itemManager)
         {
-            return _modelOfSalesContainer.ManagerSet.FirstOrDefault(m => m.LastName == itemManager.LastName && m.Name == itemManager.Name);
+            return _modelOfSalesContainer.ManagerSet.FirstOrDefault(m => m.LastName == itemManager.LastName);
         }
 
         public IEnumerable<Model.Manager> Read()
@@ -47,7 +47,6 @@ namespace DAL.Repositories
                 this._modelOfSalesContainer.ManagerSet.FirstOrDefault(m => m.ManagerId == itemManager.ManagerId);
             if (manager != null)
             {
-                manager.Name = itemManager.Name;
                 manager.LastName = itemManager.LastName;
             }
             else
@@ -68,9 +67,25 @@ namespace DAL.Repositories
                 throw new ArgumentException("This manager ID not found!");
             }
         }
+        //public void SaveChanges()
+        //{
+        //    _modelOfSalesContainer.SaveChanges();
+        //}
         public void SaveChanges()
         {
-            _modelOfSalesContainer.SaveChanges();
+            try
+            {
+                _modelOfSalesContainer.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                var errorMessages = ex.EntityValidationErrors
+                    .SelectMany(x => x.ValidationErrors)
+                    .Select(x => x.ErrorMessage);
+                var fullErrorMessage = string.Join("; ", errorMessages);
+                var exceptionMessage = string.Concat(ex.Message, " The validation errors are: ", fullErrorMessage);
+                throw new DbEntityValidationException(exceptionMessage, ex.EntityValidationErrors);
+            }
         }
         public void Dispose()
         {

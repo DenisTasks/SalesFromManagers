@@ -19,9 +19,9 @@ namespace DAL.Repositories
 
         public void Create(DAL.Models.Client itemClient)
         {
-            Mapper.Initialize(cfg => cfg.CreateMap<DAL.Models.Client, Model.Client>()
-                .ForMember("Name", opt => opt.MapFrom(c => c.Name)));
-            Model.Client client = Mapper.Map<DAL.Models.Client, Model.Client>(itemClient);
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<DAL.Models.Client, Model.Client>()
+                .ForMember("Name", opt => opt.MapFrom(c => c.Name))).CreateMapper();
+            Model.Client client = mapper.Map<DAL.Models.Client, Model.Client>(itemClient);
             _modelOfSalesContainer.ClientSet.Add(client);
         }
 

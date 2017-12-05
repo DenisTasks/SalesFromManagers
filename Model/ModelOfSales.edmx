@@ -31,7 +31,7 @@
     <Property Name="ProductId" Type="int" Nullable="false" />
     <Property Name="ClientId" Type="int" Nullable="false" />
     <Property Name="ManagerId" Type="int" Nullable="false" />
-    <Property Name="DateOfSale" Type="datetime" Nullable="false" />
+    <Property Name="DateOfSale" Type="nvarchar(max)" Nullable="false" />
   </EntityType>
   <EntityType Name="ProductSet">
     <Key>
@@ -53,7 +53,6 @@
       <PropertyRef Name="ManagerId" />
     </Key>
     <Property Name="ManagerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
     <Property Name="LastName" Type="nvarchar(max)" Nullable="false" />
   </EntityType>
   <Association Name="ProductSaleInfo">
@@ -122,10 +121,10 @@
           <Property Name="ProductId" Type="Int32" Nullable="false" />
           <Property Name="ClientId" Type="Int32" Nullable="false" />
           <Property Name="ManagerId" Type="Int32" Nullable="false" />
-          <Property Name="DateOfSale" Type="DateTime" Nullable="false" />
           <NavigationProperty Name="Product" Relationship="ModelOfSales.ProductSaleInfo" FromRole="SaleInfo" ToRole="Product" />
           <NavigationProperty Name="Client" Relationship="ModelOfSales.ClientSaleInfo" FromRole="SaleInfo" ToRole="Client" />
           <NavigationProperty Name="Manager" Relationship="ModelOfSales.ManagerSaleInfo" FromRole="SaleInfo" ToRole="Manager" />
+          <Property Name="DateOfSale" Type="String" Nullable="false" />
         </EntityType>
         <EntityType Name="Product">
           <Key>
@@ -149,7 +148,6 @@
             <PropertyRef Name="ManagerId" />
           </Key>
           <Property Name="ManagerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" />
           <Property Name="LastName" Type="String" Nullable="false" />
           <NavigationProperty Name="SaleInfo" Relationship="ModelOfSales.ManagerSaleInfo" FromRole="Manager" ToRole="SaleInfo" />
         </EntityType>
@@ -227,7 +225,6 @@
       <EntityTypeMapping TypeName="IsTypeOf(ModelOfSales.Manager)">
         <MappingFragment StoreEntitySet="ManagerSet">
           <ScalarProperty Name="ManagerId" ColumnName="ManagerId" />
-          <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="LastName" ColumnName="LastName" />
         </MappingFragment>
       </EntityTypeMapping>

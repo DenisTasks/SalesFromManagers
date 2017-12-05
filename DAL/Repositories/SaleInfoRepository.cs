@@ -19,12 +19,12 @@ namespace DAL.Repositories
 
         public void Create(DAL.Models.SaleInfo itemSaleInfo)
         {
-            Mapper.Initialize(cfg => cfg.CreateMap<DAL.Models.SaleInfo, Model.SaleInfo>()
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<DAL.Models.SaleInfo, Model.SaleInfo>()
                 .ForMember("ProductId", opt => opt.MapFrom(s => s.ProductId))
                 .ForMember("ClientId", opt => opt.MapFrom(s => s.ClientId))
                 .ForMember("ManagerId", opt => opt.MapFrom(s => s.ManagerId))
-                .ForMember("DateOfSale", opt => opt.MapFrom(s => s.DateOfSale)));
-            Model.SaleInfo saleInfo = Mapper.Map<DAL.Models.SaleInfo, Model.SaleInfo>(itemSaleInfo);
+                .ForMember("DateOfSale", opt => opt.MapFrom(s => s.DateOfSale))).CreateMapper();
+            Model.SaleInfo saleInfo = mapper.Map<DAL.Models.SaleInfo, Model.SaleInfo>(itemSaleInfo);
             _modelOfSalesContainer.SaleInfoSet.Add(saleInfo);
         }
 

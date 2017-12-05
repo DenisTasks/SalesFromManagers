@@ -12,13 +12,14 @@ namespace DAL
     {
         static void Main(string[] args)
         {
-            using (ProductRepository pr = new ProductRepository())
+            using (SaleInfoRepository pr = new SaleInfoRepository())
             {
                 Client test = new Client { ClientId = 999, Name = "Test" };
-                Manager test2 = new Manager { LastName = "Epamov", Name = "Epam" };
+                Manager test2 = new Manager { LastName = "Epamov" };
                 Product test3 = new Product { Name = "Lime", Price = 666 };
-                SaleInfo test4 = new SaleInfo { ClientId = test.ClientId, ManagerId = test2.ManagerId, ProductId = test3.ProductId, DateOfSale = DateTime.Now };
-                pr.Create(test3);
+                string s = DateTime.Now.Date.ToString();
+                SaleInfo test4 = new SaleInfo { ClientId = test.ClientId, ManagerId = test2.ManagerId, ProductId = test3.ProductId, DateOfSale = s };
+                pr.Create(test4);
                 pr.SaveChanges();
                 Console.WriteLine("done");
                 Console.ReadLine();

@@ -19,10 +19,10 @@ namespace DAL.Repositories
 
         public void Create(DAL.Models.Product itemProduct)
         {
-            Mapper.Initialize(cfg => cfg.CreateMap<DAL.Models.Product, Model.Product>()
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<DAL.Models.Product, Model.Product>()
                 .ForMember("Name", opt => opt.MapFrom(p => p.Name))
-                .ForMember("Price", opt => opt.MapFrom(p => p.Price)));
-            Model.Product product = Mapper.Map<DAL.Models.Product, Model.Product>(itemProduct);
+                .ForMember("Price", opt => opt.MapFrom(p => p.Price))).CreateMapper();
+            Model.Product product = mapper.Map<DAL.Models.Product, Model.Product>(itemProduct);
             _modelOfSalesContainer.ProductSet.Add(product);
         }
 
