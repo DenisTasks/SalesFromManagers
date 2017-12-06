@@ -4,10 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WindowsService.MappingClass;
 using FileHelpers;
-using Entity.MappingClass;
 
-namespace Entity
+namespace WindowsService.Tools
 {
     public class ConverterToRecords
     {
@@ -21,7 +21,6 @@ namespace Entity
         }
         public void CreateRecords(string path)
         {
-            Console.WriteLine("Writing...");
             string fileName = Path.GetFileNameWithoutExtension(path);
             string managerLastName = fileName.Split('_').First();
             if (managerLastName != null)
