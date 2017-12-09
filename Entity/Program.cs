@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Entity.Interfaces;
+using Entity.MappingClass;
 
 namespace Entity
 {
@@ -11,7 +13,7 @@ namespace Entity
     {
         static void Main(string[] args)
         {
-            using (FileWatcher fileWatcher = new FileWatcher("D:\\Entity"))
+            using (IWatcher<SaleInfoRecord> fileWatcher = new FileWatcher())
             {
                 Console.WriteLine("Start watching now!");
                 Console.WriteLine("Press 'q' to quit");

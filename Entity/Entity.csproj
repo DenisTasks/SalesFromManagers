@@ -51,6 +51,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
@@ -62,9 +63,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FileWatcher.cs" />
+    <Compile Include="Interfaces\IConverter.cs" />
+    <Compile Include="Interfaces\ISender.cs" />
+    <Compile Include="Interfaces\IWatcher.cs" />
     <Compile Include="SenderToDatabase.cs" />
     <Compile Include="ConverterToRecords.cs" />
-    <Compile Include="MappingClass\SaleInfoCsv.cs" />
+    <Compile Include="MappingClass\SaleInfoRecord.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

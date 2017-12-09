@@ -21,7 +21,7 @@ namespace WindowsService
 
         protected override void OnStart(string[] args)
         {
-            _fileWatcher = new FileWatcherService("D:\\Entity");
+            _fileWatcher = new FileWatcherService();
         }
 
         protected override void OnStop()

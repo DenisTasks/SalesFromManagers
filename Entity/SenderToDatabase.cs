@@ -1,17 +1,17 @@
 ﻿using DAL.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DAL.Repositories;
 using Entity.MappingClass;
-using Model;
-using DAL.Models;
+using Entity.Interfaces;
 
 namespace Entity
 {
-    public class SenderToDatabase
+    public class SenderToDatabase : ISender<SaleInfoRecord>
     {
         private readonly ICreateRepository<DAL.Models.Manager, Model.Manager> _managerRepository;
         private readonly ICreateRepository<DAL.Models.Product, Model.Product> _productRepository;
@@ -20,13 +20,13 @@ namespace Entity
 
         public SenderToDatabase()
         {
-            _managerRepository = new ManagerRepository();;
+            _managerRepository = new ManagerRepository();
             _productRepository = new ProductRepository();
             _clientRepository = new ClientRepository();
             _saleInfoRepository = new SaleInfoRepository();
         }
 
-        public void Send(string managerLastName, SaleInfoCsv item)
+        public void Send(string managerLastName, SaleInfoRecord item)
         {
             lock (this)
             {
@@ -50,15 +50,27 @@ namespace Entity
                 _clientRepository.SaveChanges();
                 Model.Client client = _clientRepository.FindByEntity(newClient);
 
-                DAL.Models.SaleInfo newSaleInfo = new DAL.Models.SaleInfo
+                try
                 {
-                    ProductId = product.ProductId,
-                    ClientId = client.ClientId,
-                    ManagerId = manager.ManagerId,
-                    DateOfSale = item.DateOfSale
-                };
-                _saleInfoRepository.Create(newSaleInfo);
-                _saleInfoRepository.SaveChanges();
+                    DAL.Models.SaleInfo newSaleInfo = new DAL.Models.SaleInfo
+                    {
+                        ProductId = product.ProductId,
+                        ClientId = client.ClientId,
+                        ManagerId = manager.ManagerId,
+                        DateOfSale = item.DateOfSale
+                    };
+                    _saleInfoRepository.Create(newSaleInfo);
+                    _saleInfoRepository.SaveChanges();
+                }
+                catch (DbEntityValidationException ex)
+                {
+                    var errorMessages = ex.EntityValidationErrors
+                        .SelectMany(x => x.ValidationErrors)
+                        .Select(x => x.ErrorMessage);
+                    var fullErrorMessage = string.Join("; ", errorMessages);
+                    var exceptionMessage = string.Concat(ex.Message, " The validation errors are: ", fullErrorMessage);
+                    throw new DbEntityValidationException(exceptionMessage, ex.EntityValidationErrors);
+                }
             }
         }
     }

@@ -4,33 +4,40 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WindowsService.Interfaces;
+using WindowsService.MappingClass;
 
 namespace WindowsService.Tools
 {
-    public class FileWatcherService : IDisposable
+    public class FileWatcherService : IWatcher<SaleInfoRecord>, IDisposable
     {
-        private readonly FileSystemWatcher _watcher;
-        private readonly ConverterToRecords _converter;
-        private Task _watcherTask;
-        public FileWatcherService(string path)
+        public FileSystemWatcher Watcher { get; }
+        public IConverter<SaleInfoRecord> Converter { get; }
+        public Task WatcherTask { get; private set; }
+        public FileWatcherService()
         {
-            _watcher = new FileSystemWatcher(path, "*.csv");
-            _watcher.Created += new FileSystemEventHandler(OnChanged);
-            _watcher.Changed += new FileSystemEventHandler(OnChanged);
-            _watcher.NotifyFilter = NotifyFilters.FileName;
-            _watcher.EnableRaisingEvents = true;
-            _converter = new ConverterToRecords();
+            string path = System.Configuration.ConfigurationManager.AppSettings["WatchingFolder"];
+            string extension = System.Configuration.ConfigurationManager.AppSettings["WatchingExtension"];
+            Watcher = new FileSystemWatcher(path, extension);
+            Watcher.Created += OnChanged;
+            Watcher.Changed += OnChanged;
+            Watcher.NotifyFilter = NotifyFilters.FileName;
+            Watcher.EnableRaisingEvents = true;
+            Converter = new ConverterToRecords();
         }
 
         public void OnChanged(object source, FileSystemEventArgs e)
         {
-            _watcherTask = new Task(() => _converter.CreateRecords(e.FullPath));
-            _watcherTask.Start();
+            WatcherTask = new Task(() => WriteToDatabase(source, e));
+            WatcherTask.Start();
         }
-
+        public void WriteToDatabase(object source, FileSystemEventArgs e)
+        {
+            Converter.CreateRecords(e.FullPath);
+        }
         public void Dispose()
         {
-            _watcher.Dispose();
+            Watcher.Dispose();
         }
     }
 }

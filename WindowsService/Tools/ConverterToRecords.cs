@@ -4,31 +4,34 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WindowsService.Interfaces;
 using WindowsService.MappingClass;
 using FileHelpers;
 
 namespace WindowsService.Tools
 {
-    public class ConverterToRecords
+    public class ConverterToRecords : IConverter<SaleInfoRecord>
     {
-        private readonly FileHelperEngine<SaleInfoCsv> _fileHelper;
-        private readonly SenderToDatabase _sender;
+        public FileHelperEngine<SaleInfoRecord> FileHelper { get; }
+        public ISender<SaleInfoRecord> Sender { get; }
+        public SaleInfoRecord[] Records { get; private set; }
 
         public ConverterToRecords()
         {
-            _fileHelper = new FileHelperEngine<SaleInfoCsv>();
-            _sender = new SenderToDatabase();
+            FileHelper = new FileHelperEngine<SaleInfoRecord>();
+            Sender = new SenderToDatabase();
+            Records = new SaleInfoRecord[] { };
         }
         public void CreateRecords(string path)
         {
             string fileName = Path.GetFileNameWithoutExtension(path);
-            string managerLastName = fileName.Split('_').First();
-            if (managerLastName != null)
+            if (fileName != null && fileName.Contains("_") && !fileName.StartsWith("_"))
             {
-                SaleInfoCsv[] records = _fileHelper.ReadFile(path);
-                foreach (var item in records)
+                string managerLastName = fileName.Split('_').First();
+                Records = FileHelper.ReadFile(path);
+                foreach (var item in Records)
                 {
-                    _sender.Send(managerLastName, item);
+                    Sender.Send(managerLastName, item);
                 }
             }
         }

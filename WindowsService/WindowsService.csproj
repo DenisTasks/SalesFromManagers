@@ -47,6 +47,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
     <Reference Include="System.Management" />
@@ -72,7 +73,10 @@
     <Compile Include="CsvService.Designer.cs">
       <DependentUpon>CsvService.cs</DependentUpon>
     </Compile>
-    <Compile Include="MappingClass\SaleInfoCsv.cs" />
+    <Compile Include="Interfaces\IConverter.cs" />
+    <Compile Include="Interfaces\ISender.cs" />
+    <Compile Include="Interfaces\IWatcher.cs" />
+    <Compile Include="MappingClass\SaleInfoRecord.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\ConverterToRecords.cs" />
@@ -93,6 +97,7 @@
       <Name>Model</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

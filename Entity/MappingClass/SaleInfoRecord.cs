@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using FileHelpers;
 
-namespace WindowsService.MappingClass
+namespace Entity.MappingClass
 {
     [DelimitedRecord(",")]
-    public class SaleInfoCsv
+    public class SaleInfoRecord
     {
         public string DateOfSale;
         public string Client;
