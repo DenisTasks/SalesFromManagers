@@ -73,15 +73,8 @@
     <Compile Include="CsvService.Designer.cs">
       <DependentUpon>CsvService.cs</DependentUpon>
     </Compile>
-    <Compile Include="Interfaces\IConverter.cs" />
-    <Compile Include="Interfaces\ISender.cs" />
-    <Compile Include="Interfaces\IWatcher.cs" />
-    <Compile Include="MappingClass\SaleInfoRecord.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tools\ConverterToRecords.cs" />
-    <Compile Include="Tools\FileWatcherService.cs" />
-    <Compile Include="Tools\SenderToDatabase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -91,6 +84,10 @@
     <ProjectReference Include="..\DAL\DAL.csproj">
       <Project>{d2057f7f-c321-4f71-994f-511d168245bd}</Project>
       <Name>DAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Entity\Entity.csproj">
+      <Project>{43155bf3-f465-4f32-a346-693644768452}</Project>
+      <Name>Entity</Name>
     </ProjectReference>
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{0dcaf3e1-63db-47e5-be91-94dedd75db67}</Project>

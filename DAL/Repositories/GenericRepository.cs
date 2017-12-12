@@ -12,9 +12,9 @@ namespace DAL.Repositories
     {
         protected ModelOfSalesContainer _modelOfSalesContainer;
 
-        public GenericRepository()
+        public GenericRepository(ModelOfSalesContainer modelOfSalesContainer)
         {
-            _modelOfSalesContainer = new ModelOfSalesContainer();
+            _modelOfSalesContainer = modelOfSalesContainer;
         }
         public void Dispose()
         {

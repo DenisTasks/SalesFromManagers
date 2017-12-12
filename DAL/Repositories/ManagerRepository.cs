@@ -12,6 +12,10 @@ namespace DAL.Repositories
 {
     public class ManagerRepository : GenericRepository, ICreateRepository<DAL.Models.Manager, Model.Manager>
     {
+        public ManagerRepository(ModelOfSalesContainer modelOfSalesContainer) : base(modelOfSalesContainer)
+        {
+        }
+
         public void Create(DAL.Models.Manager itemManager)
         {
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<DAL.Models.Manager, Model.Manager>()

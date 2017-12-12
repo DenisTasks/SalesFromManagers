@@ -15,6 +15,7 @@ namespace Entity
         {
             using (IWatcher<SaleInfoRecord> fileWatcher = new FileWatcher())
             {
+                fileWatcher.Start();
                 Console.WriteLine("Start watching now!");
                 Console.WriteLine("Press 'q' to quit");
                 while (Console.Read() != 'q') ;

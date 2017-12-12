@@ -10,9 +10,6 @@ namespace Entity.Interfaces
 {
     public interface IConverter<T> where T : class
     {
-        FileHelperEngine<T> FileHelper { get; }
-        ISender<T> Sender { get; }
-        T[] Records { get; }
         void CreateRecords(string path);
     }
 }

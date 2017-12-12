@@ -12,15 +12,15 @@ namespace Entity
 {
     public class ConverterToRecords : IConverter<SaleInfoRecord>
     {
-        public FileHelperEngine<SaleInfoRecord> FileHelper { get; }
-        public ISender<SaleInfoRecord> Sender { get; }
-        public SaleInfoRecord[] Records { get; private set; }
+        private readonly FileHelperEngine<SaleInfoRecord> _fileHelper;
+        private readonly ISender<SaleInfoRecord> _sender;
+        private SaleInfoRecord[] _records;
 
         public ConverterToRecords()
         {
-            FileHelper = new FileHelperEngine<SaleInfoRecord>();
-            Sender = new SenderToDatabase();
-            Records = new SaleInfoRecord[] {};
+            _fileHelper = new FileHelperEngine<SaleInfoRecord>();
+            _sender = new SenderToDatabase();
+            _records = new SaleInfoRecord[] {};
         }
         public void CreateRecords(string path)
         {
@@ -29,10 +29,21 @@ namespace Entity
             if (fileName != null && fileName.Contains("_") && !fileName.StartsWith("_"))
             {
                 string managerLastName = fileName.Split('_').First();
-                Records = FileHelper.ReadFile(path);
-                foreach (var item in Records)
+                try
                 {
-                    Sender.Send(managerLastName, item);
+                    _records = _fileHelper.ReadFile(path);
+                    foreach (var item in _records)
+                    {
+                        _sender.Send(managerLastName, item);
+                    }
+                }
+                catch (IOException e)
+                {
+                    Console.WriteLine("{0} : The read operation could not be performed", e.GetType().Name);
+                }
+                catch (Exception e)
+                {
+                    throw new Exception(e.Message);
                 }
             }
         }

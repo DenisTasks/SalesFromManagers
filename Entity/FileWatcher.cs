@@ -9,38 +9,56 @@ using Entity.MappingClass;
 
 namespace Entity
 {
-    public class FileWatcher : IWatcher<SaleInfoRecord>, IDisposable
+    public class FileWatcher : IWatcher<SaleInfoRecord>
     {
-        public FileSystemWatcher Watcher { get; }
-        public IConverter<SaleInfoRecord> Converter { get; }
-        public Task WatcherTask { get; private set; }
+        private FileSystemWatcher _watcher;
+        private readonly IConverter<SaleInfoRecord> _converter;
+        private Task _watcherTask;
         public FileWatcher()
+        {
+            _converter = new ConverterToRecords();
+        }
+
+        public void Start()
         {
             string path = System.Configuration.ConfigurationManager.AppSettings["WatchingFolder"];
             string extension = System.Configuration.ConfigurationManager.AppSettings["WatchingExtension"];
-            Watcher = new FileSystemWatcher(path, extension);
-            Watcher.Created += OnChanged;
-            Watcher.Changed += OnChanged;
-            Watcher.NotifyFilter = NotifyFilters.FileName;
-            Watcher.EnableRaisingEvents = true;
-            Converter = new ConverterToRecords();
+            _watcher = new FileSystemWatcher(path, extension);
+            _watcher.Created += OnChanged;
+            _watcher.Changed += OnChanged;
+            _watcher.NotifyFilter = NotifyFilters.FileName;
+            _watcher.EnableRaisingEvents = true;
         }
 
         public void OnChanged(object source, FileSystemEventArgs e)
         {
-            WatcherTask = new Task(() => WriteToDatabase(source, e));
-            WatcherTask.Start();
+            _watcherTask = new Task(() => WriteToDatabase(source, e));
+            _watcherTask.Start();
+            _watcherTask.ContinueWith(t1 => Console.WriteLine("i'm done " + t1.Id + " " + t1.IsCompleted));
         }
 
         public void WriteToDatabase(object source, FileSystemEventArgs e)
         {
-            Converter.CreateRecords(e.FullPath);
+            try
+            {
+                Console.WriteLine(DateTime.Now.Millisecond);
+                _converter.CreateRecords(e.FullPath);
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine(ex.Message);
+                // copy this file to debug folder
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.Message);
+            }
         }
         public void Dispose()
         {
-            Watcher.Created -= OnChanged;
-            Watcher.Changed -= OnChanged;
-            Watcher.Dispose();
+            _watcher.Created -= OnChanged;
+            _watcher.Changed -= OnChanged;
+            _watcher.Dispose();
         }
     }
 }

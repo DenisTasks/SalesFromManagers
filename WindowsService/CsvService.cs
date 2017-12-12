@@ -7,13 +7,13 @@ using System.Linq;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
-using WindowsService.Tools;
+using Entity;
 
 namespace WindowsService
 {
     public partial class CsvService : ServiceBase
     {
-        private FileWatcherService _fileWatcher;
+        private FileWatcher _fileWatcher;
         public CsvService()
         {
             InitializeComponent();
@@ -21,7 +21,7 @@ namespace WindowsService
 
         protected override void OnStart(string[] args)
         {
-            _fileWatcher = new FileWatcherService();
+            _fileWatcher = new FileWatcher();
         }
 
         protected override void OnStop()

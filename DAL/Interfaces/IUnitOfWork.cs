@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ namespace DAL.Interfaces
         ICreateRepository<DAL.Models.Client, Model.Client> ClientRepository { get; }
         ICreateRepository<DAL.Models.Manager, Model.Manager> ManagerRepository { get; }
         ICreateRepository<DAL.Models.SaleInfo, Model.SaleInfo> SaleInfoRepository { get; }
+        DbContextTransaction BeginTransaction();
         void Save();
     }
 }

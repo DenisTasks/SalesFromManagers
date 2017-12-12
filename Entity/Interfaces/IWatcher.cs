@@ -9,9 +9,8 @@ namespace Entity.Interfaces
 {
     public interface IWatcher<T> : IDisposable where T: class
     {
-        FileSystemWatcher Watcher { get; }
-        IConverter<T> Converter { get; }
-        Task WatcherTask { get; }
+        void Start();
         void OnChanged(object source, FileSystemEventArgs e);
+        void WriteToDatabase(object source, FileSystemEventArgs e);
     }
 }

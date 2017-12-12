@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,22 +9,26 @@ using Model;
 
 namespace DAL.Repositories
 {
-    public class UnitOfWork : IDisposable
+    public class UnitOfWork : IUnitOfWork
     {
         private readonly ModelOfSalesContainer _db = new ModelOfSalesContainer();
 
-        private ProductRepository _productRepository;
-        private ClientRepository _clientRepository;
-        private ManagerRepository _managerRepository;
-        private SaleInfoRepository _saleInfoRepository;
+        private ICreateRepository<DAL.Models.Product, Model.Product> _productRepository;
+        private ICreateRepository<DAL.Models.Client, Model.Client> _clientRepository;
+        private ICreateRepository<DAL.Models.Manager, Model.Manager> _managerRepository;
+        private ICreateRepository<DAL.Models.SaleInfo, Model.SaleInfo> _saleInfoRepository;
 
+        public DbContextTransaction BeginTransaction()
+        {
+            return _db.Database.BeginTransaction();
+        }
         public ICreateRepository<DAL.Models.Product, Model.Product> ProductRepository
         {
             get
             {
                 if (_productRepository == null)
                 {
-                    _productRepository = new ProductRepository();
+                    _productRepository = new ProductRepository(_db);
                 }
                 return _productRepository;
             }
@@ -35,7 +40,7 @@ namespace DAL.Repositories
             {
                 if (_clientRepository == null)
                 {
-                    _clientRepository = new ClientRepository();
+                    _clientRepository = new ClientRepository(_db);
                 }
                 return _clientRepository;
             }
@@ -47,7 +52,7 @@ namespace DAL.Repositories
             {
                 if (_managerRepository == null)
                 {
-                    _managerRepository = new ManagerRepository();
+                    _managerRepository = new ManagerRepository(_db);
                 }
                 return _managerRepository;
             }
@@ -59,7 +64,7 @@ namespace DAL.Repositories
             {
                 if (_saleInfoRepository == null)
                 {
-                    _saleInfoRepository = new SaleInfoRepository();
+                    _saleInfoRepository = new SaleInfoRepository(_db);
                 }
                 return _saleInfoRepository;
             }

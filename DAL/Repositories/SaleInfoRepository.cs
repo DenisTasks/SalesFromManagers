@@ -11,6 +11,10 @@ namespace DAL.Repositories
 {
     public class SaleInfoRepository : GenericRepository, ICreateRepository<DAL.Models.SaleInfo, Model.SaleInfo>
     {
+        public SaleInfoRepository(ModelOfSalesContainer modelOfSalesContainer) : base(modelOfSalesContainer)
+        {
+        }
+
         public void Create(DAL.Models.SaleInfo itemSaleInfo)
         {
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<DAL.Models.SaleInfo, Model.SaleInfo>()
