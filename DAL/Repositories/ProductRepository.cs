@@ -9,14 +9,8 @@ using DAL.Interfaces;
 
 namespace DAL.Repositories
 {
-    public class ProductRepository : ICreateRepository<DAL.Models.Product, Model.Product>
+    public class ProductRepository : GenericRepository, ICreateRepository<DAL.Models.Product, Model.Product>
     {
-        private readonly ModelOfSalesContainer _modelOfSalesContainer;
-        public ProductRepository()
-        {
-            _modelOfSalesContainer = new ModelOfSalesContainer();
-        }
-
         public void Create(DAL.Models.Product itemProduct)
         {
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<DAL.Models.Product, Model.Product>()
@@ -71,11 +65,6 @@ namespace DAL.Repositories
         public void SaveChanges()
         {
             _modelOfSalesContainer.SaveChanges();
-        }
-        public void Dispose()
-        {
-            _modelOfSalesContainer.Dispose();
-            GC.SuppressFinalize(this);
         }
     }
 }

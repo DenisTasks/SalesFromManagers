@@ -38,6 +38,8 @@ namespace Entity
         }
         public void Dispose()
         {
+            Watcher.Created -= OnChanged;
+            Watcher.Changed -= OnChanged;
             Watcher.Dispose();
         }
     }

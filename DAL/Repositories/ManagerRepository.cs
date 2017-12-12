@@ -10,14 +10,8 @@ using DAL.Interfaces;
 
 namespace DAL.Repositories
 {
-    public class ManagerRepository : ICreateRepository<DAL.Models.Manager, Model.Manager>
+    public class ManagerRepository : GenericRepository, ICreateRepository<DAL.Models.Manager, Model.Manager>
     {
-        private readonly ModelOfSalesContainer _modelOfSalesContainer;
-        public ManagerRepository()
-        {
-            _modelOfSalesContainer = new ModelOfSalesContainer();
-        }
-
         public void Create(DAL.Models.Manager itemManager)
         {
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<DAL.Models.Manager, Model.Manager>()
@@ -67,30 +61,9 @@ namespace DAL.Repositories
                 throw new ArgumentException("This manager ID not found!");
             }
         }
-        //public void SaveChanges()
-        //{
-        //    _modelOfSalesContainer.SaveChanges();
-        //}
         public void SaveChanges()
         {
-            try
-            {
-                _modelOfSalesContainer.SaveChanges();
-            }
-            catch (DbEntityValidationException ex)
-            {
-                var errorMessages = ex.EntityValidationErrors
-                    .SelectMany(x => x.ValidationErrors)
-                    .Select(x => x.ErrorMessage);
-                var fullErrorMessage = string.Join("; ", errorMessages);
-                var exceptionMessage = string.Concat(ex.Message, " The validation errors are: ", fullErrorMessage);
-                throw new DbEntityValidationException(exceptionMessage, ex.EntityValidationErrors);
-            }
-        }
-        public void Dispose()
-        {
-            _modelOfSalesContainer.Dispose();
-            GC.SuppressFinalize(this);
+            _modelOfSalesContainer.SaveChanges();
         }
     }
 }

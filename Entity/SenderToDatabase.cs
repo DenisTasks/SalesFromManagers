@@ -13,6 +13,7 @@ namespace Entity
 {
     public class SenderToDatabase : ISender<SaleInfoRecord>
     {
+        private UnitOfWork _unitOfWork;
         private readonly ICreateRepository<DAL.Models.Manager, Model.Manager> _managerRepository;
         private readonly ICreateRepository<DAL.Models.Product, Model.Product> _productRepository;
         private readonly ICreateRepository<DAL.Models.Client, Model.Client> _clientRepository;
@@ -20,6 +21,7 @@ namespace Entity
 
         public SenderToDatabase()
         {
+            _unitOfWork = new UnitOfWork();
             _managerRepository = new ManagerRepository();
             _productRepository = new ProductRepository();
             _clientRepository = new ClientRepository();
@@ -31,24 +33,23 @@ namespace Entity
             lock (this)
             {
                 DAL.Models.Manager newManager = new DAL.Models.Manager { LastName = managerLastName };
-                Model.Manager manager = _managerRepository.FindByEntity(newManager);
-                // if not found
+                Model.Manager manager = _unitOfWork.ManagerRepository.FindByEntity(newManager);
                 if (manager == null)
                 {
-                    _managerRepository.Create(newManager);
-                    _managerRepository.SaveChanges();
-                    manager = _managerRepository.FindByEntity(newManager);
+                    _unitOfWork.ManagerRepository.Create(newManager);
+                    _unitOfWork.ManagerRepository.SaveChanges();
+                    manager = _unitOfWork.ManagerRepository.FindByEntity(newManager);
                 }
 
                 DAL.Models.Product newProduct = new DAL.Models.Product { Name = item.Product, Price = item.Price };
-                _productRepository.Create(newProduct);
-                _productRepository.SaveChanges();
-                Model.Product product = _productRepository.FindByEntity(newProduct);
+                _unitOfWork.ProductRepository.Create(newProduct);
+                _unitOfWork.ProductRepository.SaveChanges();
+                Model.Product product = _unitOfWork.ProductRepository.FindByEntity(newProduct);
 
                 DAL.Models.Client newClient = new DAL.Models.Client { Name = item.Client };
-                _clientRepository.Create(newClient);
-                _clientRepository.SaveChanges();
-                Model.Client client = _clientRepository.FindByEntity(newClient);
+                _unitOfWork.ClientRepository.Create(newClient);
+                _unitOfWork.ClientRepository.SaveChanges();
+                Model.Client client = _unitOfWork.ClientRepository.FindByEntity(newClient);
 
                 try
                 {
@@ -59,8 +60,8 @@ namespace Entity
                         ManagerId = manager.ManagerId,
                         DateOfSale = item.DateOfSale
                     };
-                    _saleInfoRepository.Create(newSaleInfo);
-                    _saleInfoRepository.SaveChanges();
+                    _unitOfWork.SaleInfoRepository.Create(newSaleInfo);
+                    _unitOfWork.SaleInfoRepository.SaveChanges();
                 }
                 catch (DbEntityValidationException ex)
                 {

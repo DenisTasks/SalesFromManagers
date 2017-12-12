@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace DAL.Interfaces
 {
-    public interface ICreateRepository<TIn, TOut> : IDisposable
+    public interface ICreateRepository<TIn, TOut>
+        where TIn : class
+        where TOut : class
     {
         void Create(TIn item);
         TOut FindById(int id);
