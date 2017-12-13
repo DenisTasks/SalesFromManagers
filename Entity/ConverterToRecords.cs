@@ -31,6 +31,7 @@ namespace Entity
                 string managerLastName = fileName.Split('_').First();
                 try
                 {
+                    // write for 50strings
                     _records = _fileHelper.ReadFile(path);
                     foreach (var item in _records)
                     {

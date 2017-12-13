@@ -17,11 +17,12 @@ namespace WindowsService
         public CsvService()
         {
             InitializeComponent();
+            _fileWatcher = new FileWatcher();
         }
 
         protected override void OnStart(string[] args)
         {
-            _fileWatcher = new FileWatcher();
+            _fileWatcher.Start();
         }
 
         protected override void OnStop()

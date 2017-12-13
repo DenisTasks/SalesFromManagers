@@ -39,7 +39,7 @@ namespace DAL.Repositories
 
         public IEnumerable<Model.SaleInfo> Read()
         {
-            return _modelOfSalesContainer.SaleInfoSet.AsNoTracking();
+            return _modelOfSalesContainer.SaleInfoSet;
         }
         public void Update(DAL.Models.SaleInfo itemSaleInfo)
         {

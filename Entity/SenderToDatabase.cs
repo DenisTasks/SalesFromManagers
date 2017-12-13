@@ -36,13 +36,15 @@ namespace Entity
                             }
 
                             DAL.Models.Product newProduct = new DAL.Models.Product { Name = item.Product, Price = item.Price };
-                            Model.Product product = _unitOfWork.ProductRepository.FindByEntity(newProduct);
+                            _unitOfWork.ProductRepository.Create(newProduct);
 
                             DAL.Models.Client newClient = new DAL.Models.Client { Name = item.Client };
-                            Model.Client client = _unitOfWork.ClientRepository.FindByEntity(newClient);
-
-                            _unitOfWork.ProductRepository.Create(newProduct);
                             _unitOfWork.ClientRepository.Create(newClient);
+
+                            _unitOfWork.Save();
+
+                            Model.Product product = _unitOfWork.ProductRepository.FindByEntity(newProduct);
+                            Model.Client client = _unitOfWork.ClientRepository.FindByEntity(newClient);
 
                             DAL.Models.SaleInfo newSaleInfo = new DAL.Models.SaleInfo
                             {

@@ -34,6 +34,7 @@ namespace Entity
         {
             _watcherTask = new Task(() => WriteToDatabase(source, e));
             _watcherTask.Start();
+         //   _watcherTask.ContinueWith(t1 => t1.Exception);
             _watcherTask.ContinueWith(t1 => Console.WriteLine("i'm done " + t1.Id + " " + t1.IsCompleted));
         }
 
