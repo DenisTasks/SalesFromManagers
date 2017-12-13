@@ -15,7 +15,9 @@ namespace DAL.Interfaces
         TOut FindByEntity(TIn item);
         IEnumerable<TOut> Read();
         void Update(TIn item);
+        void Update2(TOut item);
         void Delete(TIn item);
+        void Delete2(TOut item);
         void SaveChanges();
     }
 }

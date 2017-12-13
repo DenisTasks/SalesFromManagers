@@ -51,6 +51,20 @@ namespace DAL.Repositories
                 throw new ArgumentException("This client ID not found!");
             }
         }
+
+        public void Update2(Model.Client itemClient)
+        {
+            Model.Client client =
+                this._modelOfSalesContainer.ClientSet.FirstOrDefault(c => c.ClientId == itemClient.ClientId);
+            if (client != null)
+            {
+                client.Name = itemClient.Name;
+            }
+            else
+            {
+                throw new ArgumentException("This client ID not found!");
+            }
+        }
         public void Delete(DAL.Models.Client itemClient)
         {
             Model.Client client =
@@ -64,6 +78,21 @@ namespace DAL.Repositories
                 throw new ArgumentException("This client ID not found!");
             }
         }
+
+        public void Delete2(Model.Client itemClient)
+        {
+            Model.Client client =
+                _modelOfSalesContainer.ClientSet.FirstOrDefault(c => c.ClientId == itemClient.ClientId);
+            if (client != null)
+            {
+                _modelOfSalesContainer.ClientSet.Remove(client);
+            }
+            else
+            {
+                throw new ArgumentException("This client ID not found!");
+            }
+        }
+
         public void SaveChanges()
         {
             _modelOfSalesContainer.SaveChanges();

@@ -35,6 +35,10 @@ namespace DAL.Repositories
             return _modelOfSalesContainer.ManagerSet.FirstOrDefault(m => m.LastName == itemManager.LastName);
         }
 
+        public IEnumerable<Model.Manager> FindByEntityName(string lastName)
+        {
+            return _modelOfSalesContainer.ManagerSet.Where(x => x.LastName == lastName);
+        }
         public IEnumerable<Model.Manager> Read()
         {
             return _modelOfSalesContainer.ManagerSet.AsNoTracking();
@@ -52,7 +56,35 @@ namespace DAL.Repositories
                 throw new ArgumentException("This manager ID not found!");
             }
         }
+
+        public void Update2(Model.Manager itemManager)
+        {
+            Model.Manager manager =
+                this._modelOfSalesContainer.ManagerSet.FirstOrDefault(m => m.ManagerId == itemManager.ManagerId);
+            if (manager != null)
+            {
+                manager.LastName = itemManager.LastName;
+            }
+            else
+            {
+                throw new ArgumentException("This manager ID not found!");
+            }
+        }
         public void Delete(DAL.Models.Manager itemManager)
+        {
+            Model.Manager manager =
+                _modelOfSalesContainer.ManagerSet.FirstOrDefault(m => m.ManagerId == itemManager.ManagerId);
+            if (manager != null)
+            {
+                _modelOfSalesContainer.ManagerSet.Remove(manager);
+            }
+            else
+            {
+                throw new ArgumentException("This manager ID not found!");
+            }
+        }
+
+        public void Delete2(Model.Manager itemManager)
         {
             Model.Manager manager =
                 _modelOfSalesContainer.ManagerSet.FirstOrDefault(m => m.ManagerId == itemManager.ManagerId);

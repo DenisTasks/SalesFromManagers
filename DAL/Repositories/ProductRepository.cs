@@ -53,7 +53,36 @@ namespace DAL.Repositories
                 throw new ArgumentException("This product ID not found!");
             }
         }
+        public void Update2(Model.Product itemProduct)
+        {
+            Model.Product product =
+                this._modelOfSalesContainer.ProductSet.FirstOrDefault(p => p.ProductId == itemProduct.ProductId);
+            if (product != null)
+            {
+                product.Name = itemProduct.Name;
+                product.Price = itemProduct.Price;
+            }
+            else
+            {
+                throw new ArgumentException("This product ID not found!");
+            }
+        }
+
         public void Delete(DAL.Models.Product itemProduct)
+        {
+            Model.Product product =
+                _modelOfSalesContainer.ProductSet.FirstOrDefault(p => p.ProductId == itemProduct.ProductId);
+            if (product != null)
+            {
+                _modelOfSalesContainer.ProductSet.Remove(product);
+            }
+            else
+            {
+                throw new ArgumentException("This product ID not found!");
+            }
+        }
+
+        public void Delete2(Model.Product itemProduct)
         {
             Model.Product product =
                 _modelOfSalesContainer.ProductSet.FirstOrDefault(p => p.ProductId == itemProduct.ProductId);

@@ -1,0 +1,23 @@
+﻿@model Model.SaleInfo
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Edit</title>
+</head>
+<body>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.EditorForModel()
+        <input type="submit" value="Save this @Model.GetType()"/>
+        @Html.ActionLink("Back to List", "Index")
+    }
+</body>
+</html>

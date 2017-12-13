@@ -57,7 +57,38 @@ namespace DAL.Repositories
                 throw new ArgumentException("This information of sale ID not found!");
             }
         }
+
+        public void Update2(Model.SaleInfo itemSaleInfo)
+        {
+            Model.SaleInfo saleInfo =
+                this._modelOfSalesContainer.SaleInfoSet.FirstOrDefault(s => s.SaleInfoId == itemSaleInfo.SaleInfoId);
+            if (saleInfo != null)
+            {
+                saleInfo.ProductId = itemSaleInfo.ProductId;
+                saleInfo.ClientId = itemSaleInfo.ClientId;
+                saleInfo.ManagerId = itemSaleInfo.ManagerId;
+                saleInfo.DateOfSale = itemSaleInfo.DateOfSale;
+            }
+            else
+            {
+                throw new ArgumentException("This information of sale ID not found!");
+            }
+        }
         public void Delete(DAL.Models.SaleInfo itemSaleInfo)
+        {
+            Model.SaleInfo saleInfo =
+                _modelOfSalesContainer.SaleInfoSet.FirstOrDefault(s => s.SaleInfoId == itemSaleInfo.SaleInfoId);
+            if (saleInfo != null)
+            {
+                _modelOfSalesContainer.SaleInfoSet.Remove(saleInfo);
+            }
+            else
+            {
+                throw new ArgumentException("This information of sale ID not found!");
+            }
+        }
+
+        public void Delete2(Model.SaleInfo itemSaleInfo)
         {
             Model.SaleInfo saleInfo =
                 _modelOfSalesContainer.SaleInfoSet.FirstOrDefault(s => s.SaleInfoId == itemSaleInfo.SaleInfoId);

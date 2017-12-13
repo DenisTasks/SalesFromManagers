@@ -1,0 +1,58 @@
+﻿@model Model.SaleInfo
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Details</title>
+</head>
+<body>
+    <div>
+        <h4>SaleInfo</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.DateOfSale)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.DateOfSale)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Product.Name)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Product.Name)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Client.Name)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Client.Name)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Manager.LastName)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Manager.LastName)
+            </dd>
+    
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.SaleInfoId }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</body>
+</html>
