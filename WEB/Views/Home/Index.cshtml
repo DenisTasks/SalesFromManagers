@@ -1,4 +1,4 @@
-﻿@model IEnumerable<WEB.Models.ManagerViewModel>
+﻿@model IEnumerable<BLL.DTO.SaleInfoDTO>
 
 @{
     ViewBag.Title = "Index";
@@ -12,10 +12,25 @@
 <table class="table">
     <tr>
         <th>
+            @Html.DisplayNameFor(model => model.SaleInfoId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ProductName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ProductPrice)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ClientName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ManagerName)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.ManagerId)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.LastName)
+            @Html.DisplayNameFor(model => model.DateOfSale)
         </th>
         <th></th>
     </tr>
@@ -23,10 +38,25 @@
 @foreach (var item in Model) {
     <tr>
         <td>
+            @Html.DisplayFor(modelItem => item.SaleInfoId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ProductName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ProductPrice)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ClientName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ManagerName)
+        </td>
+        <td>
             @Html.DisplayFor(modelItem => item.ManagerId)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.LastName)
+            @Html.DisplayFor(modelItem => item.DateOfSale)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |

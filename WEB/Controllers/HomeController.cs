@@ -4,21 +4,24 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using BLL.DTO;
+using BLL.Interfaces;
 using BLL.Services;
 
 namespace WEB.Controllers
 {
     public class HomeController : Controller
     {
-        private BLLService _service = new BLLService();
+        private IBLLService _service;
 
+        public HomeController(IBLLService service)
+        {
+            _service = service;
+        }
         // GET: Home
         public ActionResult Index()
         {
-            IEnumerable<ManagerDTO> managersDTO = _service.GetManagers();
-            //mapper
-            var managers = Mapper.Map
-            return View(managers);
+            IEnumerable<SaleInfoDTO> saleInfoDTO = _service.GetSaleInfo();
+            return View(saleInfoDTO);
         }
     }
 }

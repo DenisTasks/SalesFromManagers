@@ -4,24 +4,45 @@ using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using BLL.DTO;
+using BLL.Interfaces;
 using DAL.Interfaces;
 using DAL.Repositories;
+using Model;
 
 namespace BLL.Services
 {
-    public class BLLService
+    public class BLLService : IBLLService
     {
         IUnitOfWork Database { get; set; }
 
-        public BLLService()
+        public BLLService(IUnitOfWork uOw)
         {
-            Database = new UnitOfWork();
+            Database = uOw;
         }
 
         public IEnumerable<ManagerDTO> GetManagers()
         {
-            return Mapper.Map
+            Mapper.Initialize(cfg => cfg.CreateMap<Manager, ManagerDTO>());
+            return Mapper.Map<IEnumerable<Manager>, List<ManagerDTO>>(Database.ManagerRepository.Read());
+        }
+
+        public IEnumerable<SaleInfoDTO> GetSaleInfo()
+        {
+            var allSaleInfoMapper = new MapperConfiguration(cfg => cfg.CreateMap<SaleInfo, SaleInfoDTO>()
+                .ForMember("SaleInfoId", opt => opt.MapFrom(s => s.SaleInfoId))
+                .ForMember("DateOfSale", opt => opt.MapFrom(s => s.DateOfSale))
+                .ForMember("ProductName", opt => opt.MapFrom(s => s.Product.Name))
+                .ForMember("ProductPrice", opt => opt.MapFrom(s => s.Product.Price))
+                .ForMember("ClientName", opt => opt.MapFrom(s => s.Client.Name))
+                .ForMember("ManagerName", opt => opt.MapFrom(s => s.Manager.LastName))).CreateMapper();
+            return allSaleInfoMapper.Map<IEnumerable<SaleInfo>, List<SaleInfoDTO>>(Database.SaleInfoRepository.Read());
+        }
+
+        public void Dispose()
+        {
+            Database.Dispose();
         }
     }
 }

@@ -4,6 +4,11 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using BLL.Services;
+using Ninject;
+using Ninject.Modules;
+using Ninject.Web.Mvc;
+using WEB.Utils;
 
 namespace WEB
 {
@@ -13,6 +18,11 @@ namespace WEB
         {
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+
+            NinjectModule ninjectLoad = new NinjectLoad();
+            NinjectModule serviceModule = new ServiceModule("ModelOfSalesContainer");
+            var kernel = new StandardKernel(ninjectLoad, serviceModule);
+            DependencyResolver.SetResolver(new NinjectDependencyResolver(kernel));
         }
     }
 }
