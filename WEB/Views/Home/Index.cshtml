@@ -1,4 +1,4 @@
-﻿@model IEnumerable<BLL.DTO.SaleInfoDTO>
+﻿@model WEB.Models.FilterViewModel
 
 @{
     ViewBag.Title = "Index";
@@ -6,64 +6,61 @@
 
 <h2>Index</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.SaleInfoId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ProductName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ProductPrice)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ClientName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ManagerName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ManagerId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DateOfSale)
-        </th>
-        <th></th>
-    </tr>
+<form method="get">
+    <div class="form-inline">
+        <label class="control-label">Sort by manager:</label>
+        @Html.DropDownList("managerName", Model.Managers as SelectList, htmlAttributes: new {@class = "form-control", style = "width: 200px;"})
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.SaleInfoId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ProductName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ProductPrice)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ClientName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ManagerName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ManagerId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DateOfSale)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-        </td>
-    </tr>
-}
+        <label class="control-label">Sort by date of sale:</label>
+        @Html.DropDownList("dateOfSale", Model.DatesOfSale as SelectList, htmlAttributes: new { @class = "form-control", style = "width: 100px;" })
 
+        <label class="control-label">Sort by product:</label>
+        @Html.DropDownList("productName", Model.Products as SelectList, htmlAttributes: new { @class = "form-control", style = "width: 250px;" })
+
+        <input type="submit" value="Submit" class="btn btn-default" />
+    </div>
+</form>
+
+<table>
+    <tr>
+        <th>SaleInfoId</th>
+        <th>ProductName</th>
+        <th>ProductPrice</th>
+        <th>ClientName</th>
+        <th>ManagerName</th>
+        <th>ManagerId</th>
+        <th>DateOfSale</th>
+    </tr>
+    
+    @foreach (var item in Model.SaleInfo)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SaleInfoId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClientName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ManagerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ManagerId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateOfSale)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new {  id=item.SaleInfoId  }) |
+                @Html.ActionLink("Details", "Details", new { id = item.SaleInfoId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.SaleInfoId })
+            </td>
+        </tr>
+    }
 </table>

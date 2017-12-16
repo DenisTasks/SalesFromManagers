@@ -36,7 +36,7 @@ namespace DAL.Repositories
 
         public IEnumerable<Model.Client> Read()
         {
-            return _modelOfSalesContainer.ClientSet.AsNoTracking();
+            return _modelOfSalesContainer.ClientSet;
         }
         public void Update(DAL.Models.Client itemClient)
         {

@@ -4,6 +4,7 @@ using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 using AutoMapper;
 using BLL.DTO;
 using BLL.Interfaces;
@@ -26,6 +27,18 @@ namespace BLL.Services
         {
             Mapper.Initialize(cfg => cfg.CreateMap<Manager, ManagerDTO>());
             return Mapper.Map<IEnumerable<Manager>, List<ManagerDTO>>(Database.ManagerRepository.Read());
+        }
+
+        public IEnumerable<ClientDTO> GetClients()
+        {
+            Mapper.Initialize(cfg => cfg.CreateMap<Client, ClientDTO>());
+            return Mapper.Map<IEnumerable<Client>, List<ClientDTO>>(Database.ClientRepository.Read());
+        }
+
+        public IEnumerable<ProductDTO> GetProducts()
+        {
+            Mapper.Initialize(cfg => cfg.CreateMap<Product, ProductDTO>());
+            return Mapper.Map<IEnumerable<Product>, List<ProductDTO>>(Database.ProductRepository.Read());
         }
 
         public IEnumerable<SaleInfoDTO> GetSaleInfo()
