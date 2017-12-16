@@ -22,6 +22,7 @@ namespace WEB
             NinjectModule ninjectLoad = new NinjectLoad();
             NinjectModule serviceModule = new ServiceModule("ModelOfSalesContainer");
             var kernel = new StandardKernel(ninjectLoad, serviceModule);
+            kernel.Unbind<ModelValidatorProvider>();
             DependencyResolver.SetResolver(new NinjectDependencyResolver(kernel));
         }
     }

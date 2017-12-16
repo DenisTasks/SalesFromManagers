@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -38,6 +39,52 @@ namespace WEB.Controllers
             }
             FilterViewModel filterView = new FilterViewModel(saleInfo);
             return View(filterView);
+        }
+
+        public ActionResult Details(int id)
+        {
+            var details = _service.FindSaleInfoById(id);
+            return View(details);
+        }
+
+        public ActionResult Delete(int id)
+        {
+            var delete = _service.FindSaleInfoById(id);
+            return View(delete);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            _service.DeleteSaleInfoById(id);
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult Edit(int id)
+        {
+            var edit = _service.FindSaleInfoById(id);
+            return View(edit);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(SaleInfoDTO item)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    _service.UpdateSaleInfo(item);
+                    return RedirectToAction("Index");
+                }
+            }
+            catch (DataException)
+            {
+                ModelState.AddModelError("", "Unable to save changes!");
+            }
+            return View(item);
+
         }
     }
 }

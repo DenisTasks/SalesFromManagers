@@ -64,9 +64,6 @@ namespace DAL.Repositories
                 this._modelOfSalesContainer.SaleInfoSet.FirstOrDefault(s => s.SaleInfoId == itemSaleInfo.SaleInfoId);
             if (saleInfo != null)
             {
-                saleInfo.ProductId = itemSaleInfo.ProductId;
-                saleInfo.ClientId = itemSaleInfo.ClientId;
-                saleInfo.ManagerId = itemSaleInfo.ManagerId;
                 saleInfo.DateOfSale = itemSaleInfo.DateOfSale;
             }
             else

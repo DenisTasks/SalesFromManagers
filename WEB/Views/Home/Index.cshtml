@@ -23,21 +23,16 @@
 
 <table>
     <tr>
-        <th>SaleInfoId</th>
         <th>ProductName</th>
         <th>ProductPrice</th>
         <th>ClientName</th>
         <th>ManagerName</th>
-        <th>ManagerId</th>
         <th>DateOfSale</th>
     </tr>
     
     @foreach (var item in Model.SaleInfo)
     {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.SaleInfoId)
-            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ProductName)
             </td>
@@ -49,9 +44,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ManagerName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ManagerId)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DateOfSale)
