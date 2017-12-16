@@ -20,7 +20,13 @@ namespace WEB.Controllers
             _service = service;
         }
         // GET: Home
-        public ActionResult Index(string managerName, string dateOfSale, string productName)
+        public ActionResult Index()
+        {
+            FilterViewModel filterView = new FilterViewModel(_service.GetSaleInfo());
+            return View(filterView);
+        }
+
+        public PartialViewResult UpdateSaleInfoTable(string managerName, string dateOfSale, string productName)
         {
             IQueryable<SaleInfoDTO> saleInfo = _service.GetSaleInfo().AsQueryable();
             if (!String.IsNullOrEmpty(managerName) && !managerName.Equals("All"))
@@ -38,9 +44,9 @@ namespace WEB.Controllers
                 saleInfo = saleInfo.Where(p => p.ProductName == productName);
             }
             FilterViewModel filterView = new FilterViewModel(saleInfo);
-            return View(filterView);
-        }
 
+            return PartialView(filterView);
+        }
         public ActionResult Details(int id)
         {
             var details = _service.FindSaleInfoById(id);
@@ -84,7 +90,12 @@ namespace WEB.Controllers
                 ModelState.AddModelError("", "Unable to save changes!");
             }
             return View(item);
+        }
 
+        public JsonResult AjaxMethod(string input)
+        {
+            string output = input + "!!!";
+            return Json(output);
         }
     }
 }

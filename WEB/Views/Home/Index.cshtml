@@ -3,13 +3,13 @@
 @{
     ViewBag.Title = "Index";
 }
-
+<input type="button" id="btnGet" value="Build chart" />
 <h2>Index</h2>
-
-<form method="get">
+@using (Ajax.BeginForm("UpdateSaleInfoTable", "Home", new AjaxOptions {UpdateTargetId = "saleInfoAjax"}))
+{
     <div class="form-inline">
         <label class="control-label">Sort by manager:</label>
-        @Html.DropDownList("managerName", Model.Managers as SelectList, htmlAttributes: new {@class = "form-control", style = "width: 200px;"})
+        @Html.DropDownList("managerName", Model.Managers as SelectList, htmlAttributes: new { @class = "form-control", style = "width: 200px;" })
 
         <label class="control-label">Sort by date of sale:</label>
         @Html.DropDownList("dateOfSale", Model.DatesOfSale as SelectList, htmlAttributes: new { @class = "form-control", style = "width: 100px;" })
@@ -19,9 +19,10 @@
 
         <input type="submit" value="Submit" class="btn btn-default" />
     </div>
-</form>
+}
 
-<table>
+<table class="table table-hover">
+    <thead>
     <tr>
         <th>ProductName</th>
         <th>ProductPrice</th>
@@ -29,30 +30,37 @@
         <th>ManagerName</th>
         <th>DateOfSale</th>
     </tr>
+    </thead>
     
-    @foreach (var item in Model.SaleInfo)
+    <tbody id="saleInfoAjax">
+    @Html.Action("UpdateSaleInfoTable", new
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ClientName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ManagerName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateOfSale)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new {  id=item.SaleInfoId  }) |
-                @Html.ActionLink("Details", "Details", new { id = item.SaleInfoId }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.SaleInfoId })
-            </td>
-        </tr>
-    }
+        managerName = "All",
+        dateOfSale = "All",
+        productName = "All"
+    })
+    </tbody>
 </table>
+
+<script type="text/javascript">
+    $(function () {
+        $("#btnGet").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "/Home/AjaxMethod",
+                data: "'hi'",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    alert(response);
+                },
+                failure: function (response) {
+                    alert(response + "2");
+                },
+                error: function (response) {
+                    alert(response + "3");
+                }
+            });
+        });
+    });
+</script>

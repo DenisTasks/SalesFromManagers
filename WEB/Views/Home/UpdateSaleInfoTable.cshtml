@@ -1,0 +1,27 @@
+﻿@model WEB.Models.FilterViewModel
+
+@foreach (var item in Model.SaleInfo)
+{
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ProductName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ProductPrice)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ClientName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ManagerName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateOfSale)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new {id = item.SaleInfoId}) |
+            @Html.ActionLink("Details", "Details", new {id = item.SaleInfoId}) |
+            @Html.ActionLink("Delete", "Delete", new {id = item.SaleInfoId})
+        </td>
+    </tr>
+}
