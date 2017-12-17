@@ -52,6 +52,9 @@
 
     </dl>
 </div>
+<div align="center" id="chartManager" style="height: 300px">
+    <img src="@Url.Action("BuildChart", new { managerName = Model.ManagerName, managerId = Model.ManagerId })" />
+</div>
 <p>
     @Html.ActionLink("Edit", "Edit", new {  id = Model.SaleInfoId  }) |
     @Html.ActionLink("Delete", "Delete", new { id = Model.SaleInfoId }) |

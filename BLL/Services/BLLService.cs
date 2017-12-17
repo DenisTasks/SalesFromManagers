@@ -43,26 +43,26 @@ namespace BLL.Services
 
         public IEnumerable<SaleInfoDTO> GetSaleInfo()
         {
-            var allSaleInfoMapper = new MapperConfiguration(cfg => cfg.CreateMap<SaleInfo, SaleInfoDTO>()
+            var saleInfoMapper = new MapperConfiguration(cfg => cfg.CreateMap<SaleInfo, SaleInfoDTO>()
                 .ForMember("SaleInfoId", opt => opt.MapFrom(s => s.SaleInfoId))
                 .ForMember("DateOfSale", opt => opt.MapFrom(s => s.DateOfSale))
                 .ForMember("ProductName", opt => opt.MapFrom(s => s.Product.Name))
                 .ForMember("ProductPrice", opt => opt.MapFrom(s => s.Product.Price))
                 .ForMember("ClientName", opt => opt.MapFrom(s => s.Client.Name))
                 .ForMember("ManagerName", opt => opt.MapFrom(s => s.Manager.LastName))).CreateMapper();
-            return allSaleInfoMapper.Map<IEnumerable<SaleInfo>, List<SaleInfoDTO>>(Database.SaleInfoRepository.Read());
+            return saleInfoMapper.Map<IEnumerable<SaleInfo>, List<SaleInfoDTO>>(Database.SaleInfoRepository.Read());
         }
 
         public SaleInfoDTO FindSaleInfoById(int id)
         {
-            var allSaleInfoMapper = new MapperConfiguration(cfg => cfg.CreateMap<SaleInfo, SaleInfoDTO>()
+            var saleInfoMapper = new MapperConfiguration(cfg => cfg.CreateMap<SaleInfo, SaleInfoDTO>()
                 .ForMember("SaleInfoId", opt => opt.MapFrom(s => s.SaleInfoId))
                 .ForMember("DateOfSale", opt => opt.MapFrom(s => s.DateOfSale))
                 .ForMember("ProductName", opt => opt.MapFrom(s => s.Product.Name))
                 .ForMember("ProductPrice", opt => opt.MapFrom(s => s.Product.Price))
                 .ForMember("ClientName", opt => opt.MapFrom(s => s.Client.Name))
                 .ForMember("ManagerName", opt => opt.MapFrom(s => s.Manager.LastName))).CreateMapper();
-            return allSaleInfoMapper.Map<SaleInfo, SaleInfoDTO>(Database.SaleInfoRepository.FindById(id));
+            return saleInfoMapper.Map<SaleInfo, SaleInfoDTO>(Database.SaleInfoRepository.FindById(id));
         }
 
         public void DeleteSaleInfoById(int id)

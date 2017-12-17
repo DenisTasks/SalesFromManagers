@@ -3,21 +3,25 @@
 @{
     ViewBag.Title = "Index";
 }
-<input type="button" id="btnGet" value="Build chart" />
 <h2>Index</h2>
-@using (Ajax.BeginForm("UpdateSaleInfoTable", "Home", new AjaxOptions {UpdateTargetId = "saleInfoAjax"}))
+
+<div><span id="notifiFromFilter" style="color: green; font-size: 15px;"></span></div>
+
+
+@using (Ajax.BeginForm("UpdateSaleInfoTable", new AjaxOptions { UpdateTargetId = "saleInfoAjax"}))
 {
     <div class="form-inline">
-        <label class="control-label">Sort by manager:</label>
-        @Html.DropDownList("managerName", Model.Managers as SelectList, htmlAttributes: new { @class = "form-control", style = "width: 200px;" })
+    <label class="control-label">Sort by manager:</label>
+    @Html.DropDownList("managerName", Model.Managers as SelectList, htmlAttributes: new { @class = "form-control", style = "width: 200px;" })
 
-        <label class="control-label">Sort by date of sale:</label>
-        @Html.DropDownList("dateOfSale", Model.DatesOfSale as SelectList, htmlAttributes: new { @class = "form-control", style = "width: 100px;" })
+    <label class="control-label">Sort by date:</label>
+    @Html.DropDownList("dateOfSale", Model.DatesOfSale as SelectList, htmlAttributes: new { @class = "form-control", style = "width: 100px;" })
 
-        <label class="control-label">Sort by product:</label>
-        @Html.DropDownList("productName", Model.Products as SelectList, htmlAttributes: new { @class = "form-control", style = "width: 250px;" })
+    <label class="control-label">Sort by product:</label>
+    @Html.DropDownList("productName", Model.Products as SelectList, htmlAttributes: new { @class = "form-control", style = "width: 250px;" })
 
-        <input type="submit" value="Submit" class="btn btn-default" />
+    <input type="submit" name="submitButton" value="Submit" class="btn btn-default" />
+    <input type="reset" value="Reset" class="btn btn-default" />
     </div>
 }
 
@@ -34,33 +38,21 @@
     
     <tbody id="saleInfoAjax">
     @Html.Action("UpdateSaleInfoTable", new
-    {
-        managerName = "All",
-        dateOfSale = "All",
-        productName = "All"
-    })
+{
+    managerName = "All",
+    dateOfSale = "All",
+    productName = "All"
+})
     </tbody>
 </table>
 
+<script src="~/signalr/hubs"></script>
 <script type="text/javascript">
-    $(function () {
-        $("#btnGet").click(function () {
-            $.ajax({
-                type: "POST",
-                url: "/Home/AjaxMethod",
-                data: "'hi'",
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (response) {
-                    alert(response);
-                },
-                failure: function (response) {
-                    alert(response + "2");
-                },
-                error: function (response) {
-                    alert(response + "3");
-                }
-            });
-        });
+    $(function() {
+        var notificationhub = $.connection.notificationHub;
+        notificationhub.client.displayMessage = function(message) {
+            $('#notifiFromFilter').html(message);
+        };
+        $.connection.hub.start();
     });
 </script>
