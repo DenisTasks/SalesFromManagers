@@ -16,17 +16,9 @@ namespace IdentityApp.Controllers
             return View();
         }
 
-        [Authorize(Roles = "Admin")]
         public ActionResult About()
         {
-            IList<string> roles = new List<string> {"Do not have a role"};
-            ApplicationUserManager userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            ApplicationUser user = userManager.FindByEmail(User.Identity.Name);
-            if (user != null)
-            {
-                roles = userManager.GetRoles(user.Id);
-            }
-            return View(roles);
+            return View();
         }
 
         public ActionResult Contact()

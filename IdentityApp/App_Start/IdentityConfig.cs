@@ -11,6 +11,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using IdentityApp.Models;
+using Microsoft.Ajax.Utilities;
 
 namespace IdentityApp
 {
@@ -39,7 +40,6 @@ namespace IdentityApp
             : base(store)
         {
         }
-
         public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context) 
         {
             var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<ApplicationDbContext>()));

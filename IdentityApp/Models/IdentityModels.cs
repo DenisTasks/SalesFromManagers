@@ -29,5 +29,7 @@ namespace IdentityApp.Models
         {
             return new ApplicationDbContext();
         }
+
+        //public System.Data.Entity.DbSet<IdentityApp.Models.ApplicationUser> ApplicationUsers { get; set; }
     }
 }

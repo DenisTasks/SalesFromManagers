@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
@@ -9,6 +10,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using IdentityApp.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace IdentityApp.Controllers
 {
@@ -22,7 +24,7 @@ namespace IdentityApp.Controllers
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -34,9 +36,9 @@ namespace IdentityApp.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -120,7 +122,7 @@ namespace IdentityApp.Controllers
             // Если пользователь введет неправильные коды за указанное время, его учетная запись 
             // будет заблокирована на заданный период. 
             // Параметры блокирования учетных записей можно настроить в IdentityConfig
-            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
+            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe, rememberBrowser: model.RememberBrowser);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -142,6 +144,49 @@ namespace IdentityApp.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
+        public ActionResult AddNewUser()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "Admin")]
+        public ActionResult ManageUsers()
+        {
+            List<ApplicationUser> manageUsers;
+            //using (UserManager)
+            //{
+            manageUsers = UserManager.Users.ToList();
+            //}
+            return View(manageUsers);
+        }
+
+        [Authorize(Roles = "Admin")]
+        public ActionResult Delete(string id)
+        {
+            var deleteUser = UserManager.FindById(id);
+            return View(deleteUser);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteConfirmed(string id)
+        {
+            var deleteUser = UserManager.FindById(id);
+            var result = await UserManager.DeleteAsync(deleteUser);
+            if (result.Succeeded)
+            {
+                return RedirectToAction("DeleteIsDone", "Account");
+            }
+            AddErrors(result);
+            return View("Delete", deleteUser);
+        }
+
+        public ActionResult DeleteIsDone()
+        {
+            return View();
+        }
         //
         // POST: /Account/Register
         [HttpPost]
@@ -158,9 +203,9 @@ namespace IdentityApp.Controllers
 
                     // роль по умолчанию
                     await UserManager.AddToRoleAsync(user.Id, "Manager");
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
-                    
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
+
                     return RedirectToAction("Index", "Home");
                 }
                 AddErrors(result);
@@ -170,6 +215,33 @@ namespace IdentityApp.Controllers
             return View(model);
         }
 
+        public ActionResult AddNewUserIsDone()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> AddNewUser(RegisterViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var result = await UserManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+
+                    // роль по умолчанию
+                    await UserManager.AddToRoleAsync(user.Id, "Manager");
+
+                    return RedirectToAction("AddNewUserIsDone", "Account");
+                }
+                AddErrors(result);
+            }
+
+            // Появление этого сообщения означает наличие ошибки; повторное отображение формы
+            return View(model);
+        }
         //
         // GET: /Account/ConfirmEmail
         [AllowAnonymous]
