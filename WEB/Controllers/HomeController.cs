@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using BLL.DTO;
 using BLL.Interfaces;
 using BLL.Services;
-using Microsoft.AspNet.SignalR.Infrastructure;
 using WEB.Models;
 using WEB.Hubs;
 using System.Web.Helpers;
@@ -60,6 +60,12 @@ namespace WEB.Controllers
         public ActionResult Details(int id)
         {
             var details = _service.FindSaleInfoById(id);
+
+            List<string> products = new List<string>() { "iPhone", "iPad", "iMac", "iPod" };
+            List<int> count = new List<int>() { 10, 20, 5, 1 };
+            ViewBag.PRODUCTS = products;
+            ViewBag.COUNT = count;
+
             return View(details);
         }
 
@@ -102,39 +108,26 @@ namespace WEB.Controllers
             return View(item);
         }
 
+        public JsonResult ValidateDate(string DateOfSale)
+        {
+            //var result = DateTime.ParseExact(dateString, format, CultureInfo.InvariantCulture);
+            DateTime parsedDate;
+            if (!DateTime.TryParse(DateOfSale, out parsedDate))
+            {
+                return Json($"Please, enter a valid date >> dd/MM/yyyy <<! Now we have {DateOfSale}",
+                    JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         private void SendMessageAboutFilter(string message)
         {
             var context = Microsoft.AspNet.SignalR.GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
             context.Clients.All.displayMessage(message);
         }
 
-        public ActionResult BuildChart(string managerName, int managerId)
-        {
-            List<string> xValuesList = new List<string>();
-            List<int> yValuesList = new List<int>();
-            IEnumerable<SaleInfoDTO> saleInfo = _service.GetSaleInfo().Where(m => m.ManagerId == managerId);
-            foreach (var item in saleInfo)
-            {
-                xValuesList.Add(item.DateOfSale);
-                yValuesList.Add(item.ProductPrice);
-            }
-
-            var chart = new Chart(width: 500, height: 250, theme: ChartTheme.Green)
-                .AddTitle($"Chart of {managerName} productive")
-                .AddSeries(
-                    name: "Manager result",
-                    chartType: "Line",
-                    xValue: xValuesList,
-                    yValues: yValuesList)
-                .AddLegend()
-                .Write();
-            return null;
-        }
-
-        public JsonResult AjaxMethod(string input)
-        {
-            string output = input + "!!!";
-            return Json(output);
-        }
     }
 }

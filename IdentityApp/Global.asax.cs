@@ -6,7 +6,12 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using BLL.Services;
+using IdentityApp.App_Start;
 using IdentityApp.Models;
+using Ninject;
+using Ninject.Modules;
+using Ninject.Web.Mvc;
 
 namespace IdentityApp
 {
@@ -21,6 +26,12 @@ namespace IdentityApp
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            NinjectModule ninjectLoad = new NinjectLoad();
+            NinjectModule serviceModule = new ServiceModule("ModelOfSalesContainer");
+            var kernel = new StandardKernel(ninjectLoad, serviceModule);
+            kernel.Unbind<ModelValidatorProvider>();
+            DependencyResolver.SetResolver(new NinjectDependencyResolver(kernel));
         }
     }
 }
