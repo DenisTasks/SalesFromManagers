@@ -48,6 +48,16 @@
             </div>
         </div>
 
+        <div class="col-md-10">
+            @Html.HiddenFor(model => model.SaleInfoId)
+        </div>
+        <div class="col-md-10">
+            @Html.HiddenFor(model => model.ClientId)
+        </div>
+        <div class="col-md-10">
+            @Html.HiddenFor(model => model.ProductId)
+        </div>
+
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Save" class="btn btn-default" />

@@ -80,7 +80,7 @@ namespace IdentityApp.Controllers
             DateTime parsedDate;
             if (!DateTime.TryParse(DateOfSale, out parsedDate))
             {
-                return Json($"Please, enter a valid date >> dd/MM/yyyy <<!",
+                return Json("Please, enter a valid date >> dd/MM/yyyy <<!",
                     JsonRequestBehavior.AllowGet);
             }
             else

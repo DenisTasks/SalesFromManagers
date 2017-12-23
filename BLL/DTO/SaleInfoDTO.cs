@@ -11,11 +11,8 @@ namespace BLL.DTO
     public class SaleInfoDTO
     {
         public int SaleInfoId { get; set; }
-        [HiddenInput(DisplayValue = false)]
         public int ProductId { get; set; }
-        [HiddenInput(DisplayValue = false)]
         public int ClientId { get; set; }
-        [HiddenInput(DisplayValue = false)]
         public int ManagerId { get; set; }
 
 
