@@ -1,0 +1,87 @@
+﻿@model BLL.DTO.SaleInfoDTO
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>Details</h2>
+
+<div id="chart_container" style="width: 400px; height: 300px; border: 2px mediumvioletred; padding: 2px; border-radius: 5px;">
+    <p>Chart's @Model.ManagerName</p>
+    <canvas id="bar_chart"></canvas>
+</div>
+
+<div class="table table-bordered">
+    <h4>SaleInfo ID: @Model.SaleInfoId by manager @Model.ManagerName</h4>
+
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProductName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductPrice)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProductPrice)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ClientName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ClientName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DateOfSale)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DateOfSale)
+        </dd>
+
+    </dl>
+</div>
+
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.SaleInfoId }) |
+    @Html.ActionLink("Delete", "Delete", new { id = Model.SaleInfoId }) |
+    @Html.ActionLink("Back to List", "Statistics", "Home")
+</p>
+
+@section scripts
+{
+    <script src="~/Scripts/Chart.min.js" type="text/javascript"></script>
+    <script>
+        var productsArray = @Html.Raw(Json.Encode(ViewBag.PRODUCTS));
+        var count = @Html.Raw(Json.Encode(ViewBag.COUNT));
+        var ctx = $("#bar_chart");
+        var barChart = new Chart(ctx,
+            {
+                type: 'bar',
+                data: {
+                    labels: productsArray,
+                    datasets: [
+                        {
+                            label: "Sold product:",
+                            data: count,
+                            //background: ["rgba(255,3,3,1)","rgba(11,3,255,1)", "rgba(24,255,3,1)", "rgba(100,255,3,1)"],
+                            borderColor: ["rgba(200,3,3,1)","rgba(40,3,255,1)", "rgba(50,255,3,1)", "rgba(130,255,3,1)"],
+                            borderWidth: 3
+                        }]
+                },
+                options: {
+                    maintainAspectRatio : false,
+                    scales: {xAxes:[{ticks:{beginAtZero:true} }] },
+                    legend: {display: false}
+                },
+            });
+    </script>
+}

@@ -40,7 +40,7 @@ namespace BLL.DTO
 
 
         //[StringLength(8, MinimumLength = 8, ErrorMessage = "Please, write date as ddMMyyyy!")]
-        [Remote("ValidateDate", "Home")]
+        [Remote("ValidateDate", "Admin")]
         public string DateOfSale { get; set; }
     }
 }

@@ -20,13 +20,12 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Имя приложения", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Sales of managers", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Домашняя страница", "Index", "Home")</li>
                     <li>@Html.ActionLink("Statistics", "Statistics", "Home")</li>
-                    <li>@Html.ActionLink("Контакт", "Contact", "Home")</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
@@ -36,7 +35,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year – приложение ASP.NET</p>
+            <p>&copy; @DateTime.Now.Year – all rights reserved (C)</p>
         </footer>
     </div>
 
@@ -46,6 +45,7 @@
     @Scripts.Render("~/bundles/jqueryAjaxHelper")
     @Scripts.Render("~/bundles/jqueryS")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/chart")
     @RenderSection("scripts", required: false)
 </body>
 </html>

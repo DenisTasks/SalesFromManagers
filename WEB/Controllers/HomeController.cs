@@ -57,6 +57,8 @@ namespace WEB.Controllers
             SendMessageAboutFilter(message);
             return PartialView(_filterView);
         }
+
+
         public ActionResult Details(int id)
         {
             var details = _service.FindSaleInfoById(id);
@@ -68,6 +70,8 @@ namespace WEB.Controllers
 
             return View(details);
         }
+
+
 
         public ActionResult Delete(int id)
         {
@@ -82,6 +86,8 @@ namespace WEB.Controllers
             _service.DeleteSaleInfoById(id);
             return RedirectToAction("Index");
         }
+
+
 
         public ActionResult Edit(int id)
         {
@@ -122,6 +128,10 @@ namespace WEB.Controllers
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
         }
+
+
+
+
 
         private void SendMessageAboutFilter(string message)
         {

@@ -27,7 +27,7 @@ namespace IdentityApp.Controllers
             return View();
         }
 
-        //[Authorize]
+        [Authorize]
         public ActionResult Statistics()
         {
             _filterView = new FilterViewModel(_service.GetSaleInfo());
@@ -66,7 +66,6 @@ namespace IdentityApp.Controllers
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
-
             return View();
         }
 
