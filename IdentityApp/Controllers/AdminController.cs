@@ -22,11 +22,11 @@ namespace IdentityApp.Controllers
         public ActionResult Details(int id)
         {
             var details = _service.FindSaleInfoById(id);
+            var chartInfo = _service.GetChartInfo(details);
 
-            List<string> products = new List<string>() { "iPhone", "iPad", "iMac", "iPod" };
-            List<int> count = new List<int>() { 10, 20, 5, 1 };
-            ViewBag.PRODUCTS = products;
-            ViewBag.COUNT = count;
+            ViewBag.Products = chartInfo.Products;
+            ViewBag.Count = chartInfo.Count;
+            ViewBag.Summ = chartInfo.Summ;
 
             return View(details);
         }
@@ -83,10 +83,7 @@ namespace IdentityApp.Controllers
                 return Json("Please, enter a valid date >> dd/MM/yyyy <<!",
                     JsonRequestBehavior.AllowGet);
             }
-            else
-            {
-                return Json(true, JsonRequestBehavior.AllowGet);
-            }
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
     }
 }

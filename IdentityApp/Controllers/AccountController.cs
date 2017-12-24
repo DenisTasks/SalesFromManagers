@@ -153,10 +153,9 @@ namespace IdentityApp.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult ManageUsers()
         {
-            List<ApplicationUser> manageUsers;
             //using (UserManager)
             //{
-            manageUsers = UserManager.Users.ToList();
+            var manageUsers = UserManager.Users.ToList();
             //}
             return View(manageUsers);
         }

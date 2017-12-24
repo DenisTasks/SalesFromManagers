@@ -10,11 +10,11 @@ namespace BLL.Interfaces
 {
     public interface IBLLService
     {
-        IEnumerable<ManagerDTO> GetManagers();
         IEnumerable<SaleInfoDTO> GetSaleInfo();
         SaleInfoDTO FindSaleInfoById(int id);
         void DeleteSaleInfoById(int id);
         void UpdateSaleInfo(SaleInfoDTO item);
+        ChartInfo GetChartInfo(SaleInfoDTO item);
         void Dispose();
     }
 }

@@ -44,8 +44,8 @@
         </dl>
     </div>
     
-<div id="chart_container" style="border: mediumvioletred; padding: 2px; border-radius: 5px;">
-    <p>Chart's @Model.ManagerName</p>
+<div id="chart_container">
+    <p>Chart's for manager @Model.ManagerName --- Summ of sales : @ViewBag.Summ $</p>
     <canvas id="bar_chart"></canvas>
 </div>
 
@@ -61,9 +61,21 @@
 {
     <script src="~/Scripts/Chart.min.js" type="text/javascript"></script>
     <script>
-        var productsArray = @Html.Raw(Json.Encode(ViewBag.PRODUCTS));
-        var count = @Html.Raw(Json.Encode(ViewBag.COUNT));
+        var productsArray = @Html.Raw(Json.Encode(ViewBag.Products));
+        var count = @Html.Raw(Json.Encode(ViewBag.Count));
         var ctx = $("#bar_chart");
+        var coloR = [];
+        var borderColor = [];
+        var dynamicColors = function() {
+            var r = Math.floor(Math.random() * 255);
+            var g = Math.floor(Math.random() * 255);
+            var b = Math.floor(Math.random() * 255);
+            return "rgb(" + r + "," + g + "," + b + ")";
+        };
+        for (var i in productsArray) {
+            coloR.push(dynamicColors());
+            borderColor.push(dynamicColors());
+        }
         var barChart = new Chart(ctx,
             {
                 type: 'bar',
@@ -71,16 +83,16 @@
                     labels: productsArray,
                     datasets: [
                         {
-                            label: "Sold product:",
+                            label: "Sold $",
                             data: count,
-                            //background: ["rgba(255,3,3,1)","rgba(11,3,255,1)", "rgba(24,255,3,1)", "rgba(100,255,3,1)"],
-                            borderColor: ["rgba(200,3,3,1)","rgba(40,3,255,1)", "rgba(50,255,3,1)", "rgba(130,255,3,1)"],
-                            borderWidth: 3
+                            backgroundColor: coloR,
+                            borderColor: borderColor,
+                            borderWidth: 1
                         }]
                 },
                 options: {
                     maintainAspectRatio : false,
-                    scales: {xAxes:[{ticks:{beginAtZero:true} }] },
+                    scales: {yAxes:[{ticks:{beginAtZero:true} }] },
                     legend: {display: false}
                 },
             });

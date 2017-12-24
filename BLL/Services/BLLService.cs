@@ -23,24 +23,6 @@ namespace BLL.Services
             Database = uOw;
         }
 
-        public IEnumerable<ManagerDTO> GetManagers()
-        {
-            Mapper.Initialize(cfg => cfg.CreateMap<Manager, ManagerDTO>());
-            return Mapper.Map<IEnumerable<Manager>, List<ManagerDTO>>(Database.ManagerRepository.Read());
-        }
-
-        public IEnumerable<ClientDTO> GetClients()
-        {
-            Mapper.Initialize(cfg => cfg.CreateMap<Client, ClientDTO>());
-            return Mapper.Map<IEnumerable<Client>, List<ClientDTO>>(Database.ClientRepository.Read());
-        }
-
-        public IEnumerable<ProductDTO> GetProducts()
-        {
-            Mapper.Initialize(cfg => cfg.CreateMap<Product, ProductDTO>());
-            return Mapper.Map<IEnumerable<Product>, List<ProductDTO>>(Database.ProductRepository.Read());
-        }
-
         public IEnumerable<SaleInfoDTO> GetSaleInfo()
         {
             var saleInfoMapper = new MapperConfiguration(cfg => cfg.CreateMap<SaleInfo, SaleInfoDTO>()
@@ -122,6 +104,23 @@ namespace BLL.Services
                 }
             }
         }
+
+        public ChartInfo GetChartInfo(SaleInfoDTO saleInfo)
+        {
+            var specificSaleInfo = GetSaleInfo().Where(x => x.ManagerName == saleInfo.ManagerName).ToList();
+            ChartInfo chartInfo = new ChartInfo();
+            foreach (var item in specificSaleInfo)
+            {
+                if (!chartInfo.Products.Contains(item.ProductName))
+                {
+                    chartInfo.Products.Add(item.ProductName);
+                    chartInfo.Count.Add(specificSaleInfo.Count(x => x.ProductName == item.ProductName) * item.ProductPrice);
+                    chartInfo.Summ += (specificSaleInfo.Count(x => x.ProductName == item.ProductName) * item.ProductPrice);
+                }
+            }
+            return chartInfo;
+        }
+
         public void Dispose()
         {
             Database.Dispose();
