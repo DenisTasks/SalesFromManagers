@@ -1,29 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using BLL.DTO;
 using BLL.Interfaces;
-using BLL.Services;
-using WEB.Models;
-using WEB.Hubs;
-using System.Web.Helpers;
+using IdentityApp.App_Start;
+using IdentityApp.Models;
+using IdentityApp.Utils;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 
-namespace WEB.Controllers
+namespace IdentityApp.Controllers
 {
     public class HomeController : Controller
     {
         private readonly IBLLService _service;
         private FilterViewModel _filterView;
+
         public HomeController(IBLLService service)
         {
             _service = service;
         }
-        // GET: Home
         public ActionResult Index()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public ActionResult Statistics()
         {
             _filterView = new FilterViewModel(_service.GetSaleInfo());
             return View(_filterView);
@@ -58,79 +63,11 @@ namespace WEB.Controllers
             return PartialView(_filterView);
         }
 
-
-        public ActionResult Details(int id)
+        public ActionResult Contact()
         {
-            var details = _service.FindSaleInfoById(id);
-
-            List<string> products = new List<string>() { "iPhone", "iPad", "iMac", "iPod" };
-            List<int> count = new List<int>() { 10, 20, 5, 1 };
-            ViewBag.PRODUCTS = products;
-            ViewBag.COUNT = count;
-
-            return View(details);
+            ViewBag.Message = "Your contact page.";
+            return View();
         }
-
-
-
-        public ActionResult Delete(int id)
-        {
-            var delete = _service.FindSaleInfoById(id);
-            return View(delete);
-        }
-
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            _service.DeleteSaleInfoById(id);
-            return RedirectToAction("Index");
-        }
-
-
-
-        public ActionResult Edit(int id)
-        {
-            var edit = _service.FindSaleInfoById(id);
-            return View(edit);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(SaleInfoDTO item)
-        {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    _service.UpdateSaleInfo(item);
-                    return RedirectToAction("Index");
-                }
-            }
-            catch (DataException)
-            {
-                ModelState.AddModelError("", "Unable to save changes!");
-            }
-            return View(item);
-        }
-
-        public JsonResult ValidateDate(string DateOfSale)
-        {
-            //var result = DateTime.ParseExact(dateString, format, CultureInfo.InvariantCulture);
-            DateTime parsedDate;
-            if (!DateTime.TryParse(DateOfSale, out parsedDate))
-            {
-                return Json($"Please, enter a valid date >> dd/MM/yyyy <<! Now we have {DateOfSale}",
-                    JsonRequestBehavior.AllowGet);
-            }
-            else
-            {
-                return Json(true, JsonRequestBehavior.AllowGet);
-            }
-        }
-
-
-
 
 
         private void SendMessageAboutFilter(string message)
@@ -138,6 +75,5 @@ namespace WEB.Controllers
             var context = Microsoft.AspNet.SignalR.GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
             context.Clients.All.displayMessage(message);
         }
-
     }
 }

@@ -1,4 +1,4 @@
-﻿@model WEB.Models.FilterViewModel
+﻿@model IdentityApp.Models.FilterViewModel
 
 @foreach (var item in Model.SaleInfo)
 {
@@ -21,10 +21,13 @@
         <td>
             @Html.DisplayFor(modelItem => item.DateOfSale)
         </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new {id = item.SaleInfoId}) |
-            @Html.ActionLink("Details", "Details", new {id = item.SaleInfoId}) |
-            @Html.ActionLink("Delete", "Delete", new {id = item.SaleInfoId})
-        </td>
+        @if (User.IsInRole("Admin"))
+        {
+            <td>
+                @Html.ActionLink("Edit", "Edit", "Admin", new { id = item.SaleInfoId }, null) |
+                @Html.ActionLink("Details", "Details", "Admin", new { id = item.SaleInfoId }, null) |
+                @Html.ActionLink("Delete", "Delete", "Admin", new { id = item.SaleInfoId }, null)
+            </td>
+        }
     </tr>
 }

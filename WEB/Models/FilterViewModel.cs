@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using BLL.DTO;
 
-namespace WEB.Models
+namespace IdentityApp.Models
 {
     public class FilterViewModel
     {

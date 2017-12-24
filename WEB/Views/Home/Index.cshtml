@@ -1,59 +1,18 @@
-﻿@model WEB.Models.FilterViewModel
-
-@{
-    ViewBag.Title = "Index";
+﻿@{
+    ViewBag.Title = "Home Page";
 }
-<h2>Index</h2>
 
-<div><span id="notifiFromFilter" style="color: green; font-size: 15px;"></span></div>
+<div class="jumbotron">
+    <h1>System sales of managers</h1>
+    <p class="lead">Information about sales, statistics, lists and filters.</p>
+</div>
 
-
-@using (Ajax.BeginForm("UpdateSaleInfoTable", new AjaxOptions { UpdateTargetId = "saleInfoAjax"}))
-{
-    <div class="form-inline">
-    <label class="control-label">Sort by manager:</label>
-    @Html.DropDownList("managerName", Model.Managers as SelectList, htmlAttributes: new { @class = "form-control", style = "width: 200px;" })
-
-    <label class="control-label">Sort by date:</label>
-    @Html.DropDownList("dateOfSale", Model.DatesOfSale as SelectList, htmlAttributes: new { @class = "form-control", style = "width: 100px;" })
-
-    <label class="control-label">Sort by product:</label>
-    @Html.DropDownList("productName", Model.Products as SelectList, htmlAttributes: new { @class = "form-control", style = "width: 250px;" })
-
-    <input type="submit" name="submitButton" value="Submit" class="btn btn-default" />
-    <input type="reset" value="Reset" class="btn btn-default" />
+<div class="row">
+    <div class="col-md-4">
+        <h2>Please, login to see the information about sales.</h2>
+        <p>
+            This system created from Dzianis Tarasevich for EPAM task number five.
+        </p>
+        <p><a class="btn btn-default" href="http://training.by">Learn more &raquo;</a></p>
     </div>
-}
-
-<table class="table table-hover">
-    <thead>
-    <tr>
-        <th>Id</th>
-        <th>Product Name</th>
-        <th>Product Price</th>
-        <th>Client Name</th>
-        <th>Manager Name</th>
-        <th>Date Of Sale</th>
-    </tr>
-    </thead>
-    
-    <tbody id="saleInfoAjax">
-    @Html.Action("UpdateSaleInfoTable", new
-{
-    managerName = "All",
-    dateOfSale = "All",
-    productName = "All"
-})
-    </tbody>
-</table>
-
-<script src="~/signalr/hubs"></script>
-<script type="text/javascript">
-    $(function() {
-        var notificationhub = $.connection.notificationHub;
-        notificationhub.client.displayMessage = function(message) {
-            $('#notifiFromFilter').html(message);
-        };
-        $.connection.hub.start();
-    });
-</script>
+</div>
