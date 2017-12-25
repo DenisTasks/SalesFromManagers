@@ -30,45 +30,57 @@ namespace IdentityApp.Controllers
         [Authorize]
         public ActionResult Statistics()
         {
-            _filterView = new FilterViewModel(_service.GetSaleInfo());
+            using (_service)
+            {
+                try
+                {
+                    _filterView = new FilterViewModel(_service.GetSaleInfo());
+                }
+                catch (Exception)
+                {
+                    return View("Error");
+                }
+            }
             return View(_filterView);
         }
 
         public PartialViewResult UpdateSaleInfoTable(string managerName, string dateOfSale, string productName)
         {
-            IQueryable<SaleInfoDTO> saleInfo = _service.GetSaleInfo().AsQueryable();
-            #region Filtering
-            if (!String.IsNullOrEmpty(managerName) && !managerName.Equals("All"))
+            using (_service)
             {
-                saleInfo = saleInfo.Where(m => m.ManagerName == managerName);
-            }
+                try
+                {
+                    IQueryable<SaleInfoDTO> saleInfo = _service.GetSaleInfo().AsQueryable();
+                    #region Filtering
+                    if (!String.IsNullOrEmpty(managerName) && !managerName.Equals("All"))
+                    {
+                        saleInfo = saleInfo.Where(m => m.ManagerName == managerName);
+                    }
+                    if (!String.IsNullOrEmpty(dateOfSale) && !dateOfSale.Equals("All"))
+                    {
+                        saleInfo = saleInfo.Where(d => d.DateOfSale == dateOfSale);
+                    }
+                    if (!String.IsNullOrEmpty(productName) && !productName.Equals("All"))
+                    {
+                        saleInfo = saleInfo.Where(p => p.ProductName == productName);
+                    }
+                    _filterView = new FilterViewModel(saleInfo);
+                    #endregion
+                    string message = $"You see filter sale info by manager {managerName}, date {dateOfSale}, product {productName}";
+                    if (managerName == "All" && dateOfSale == "All" && productName == "All")
+                    {
+                        message = string.Empty;
+                    }
+                    SendMessageAboutFilter(message);
+                }
+                catch (Exception)
+                {
+                    return PartialView("Error");
+                }
 
-            if (!String.IsNullOrEmpty(dateOfSale) && !dateOfSale.Equals("All"))
-            {
-                saleInfo = saleInfo.Where(d => d.DateOfSale == dateOfSale);
             }
-
-            if (!String.IsNullOrEmpty(productName) && !productName.Equals("All"))
-            {
-                saleInfo = saleInfo.Where(p => p.ProductName == productName);
-            }
-            _filterView = new FilterViewModel(saleInfo);
-            #endregion
-            string message = $"You see filter sale info by manager {managerName}, date {dateOfSale}, product {productName}";
-            if (managerName == "All" && dateOfSale == "All" && productName == "All")
-            {
-                message = string.Empty;
-            }
-            SendMessageAboutFilter(message);
             return PartialView(_filterView);
         }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-            return View();
-        }
-
 
         private void SendMessageAboutFilter(string message)
         {

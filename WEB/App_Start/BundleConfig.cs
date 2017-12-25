@@ -5,29 +5,18 @@ namespace IdentityApp
 {
     public class BundleConfig
     {
-        //Дополнительные сведения об объединении см. по адресу: http://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
+            bundles.Add(new ScriptBundle("~/bundles/jqueryVal").Include(
                         "~/Scripts/jquery.validate*"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryAjax").Include(
                 "~/Scripts/jquery.unobtrusive-ajax.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/jqueryAjaxHelper").Include(
-                "~/Scripts/jquery.ajaxhelper.js"));
-
-            bundles.Add(new ScriptBundle("~/bundles/jqueryS").Include(
-                "~/Scripts/jquery.signalR-{version}.js"));
-
-            bundles.Add(new ScriptBundle("~/bundles/chart").Include(
-                "~/Scripts/Chart*"));
-
-            // Используйте версию Modernizr для разработчиков, чтобы учиться работать. Когда вы будете готовы перейти к работе,
-            // используйте средство сборки на сайте http://modernizr.com, чтобы выбрать только нужные тесты.
+            //
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
 

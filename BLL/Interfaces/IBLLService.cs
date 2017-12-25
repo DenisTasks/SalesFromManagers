@@ -8,13 +8,12 @@ using BLL.DTO;
 
 namespace BLL.Interfaces
 {
-    public interface IBLLService
+    public interface IBLLService : IDisposable
     {
         IEnumerable<SaleInfoDTO> GetSaleInfo();
         SaleInfoDTO FindSaleInfoById(int id);
         void DeleteSaleInfoById(int id);
         void UpdateSaleInfo(SaleInfoDTO item);
         ChartInfo GetChartInfo(SaleInfoDTO item);
-        void Dispose();
     }
 }

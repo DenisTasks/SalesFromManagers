@@ -19,7 +19,6 @@ namespace IdentityApp
     {
         protected void Application_Start()
         {
-            // чуть что закомментить (создаем базу с уже созданными юзерами)
         //    Database.SetInitializer<ApplicationDbContext>(new AppDbInitializer());
 
             AreaRegistration.RegisterAllAreas();

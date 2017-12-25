@@ -54,14 +54,14 @@ namespace BLL.Services
                 try
                 {
                     var deleteItem = Database.SaleInfoRepository.FindById(id);
-                    Database.SaleInfoRepository.Delete2(deleteItem);
+                    Database.SaleInfoRepository.Delete(deleteItem);
                     Database.Save();
                     transaction.Commit();
                 }
                 catch (Exception e)
                 {
                     transaction.Rollback();
-                    throw new Exception(e.Source + " : Crash in BLLService from SaleInfo id: " + id);
+                    throw new Exception(e.Source + " : Crash in BLLService from DeleteSaleInfoById");
                 }
             }
         }
@@ -79,20 +79,20 @@ namespace BLL.Services
                         .ForMember("ManagerId", opt => opt.MapFrom(s => s.ManagerId))
                         .ForMember("DateOfSale", opt => opt.MapFrom(s => s.DateOfSale))).CreateMapper();
                     var updateItemSaleInfo = updateMapperSaleInfo.Map<SaleInfoDTO, SaleInfo>(item);
-                    Database.SaleInfoRepository.Update2(updateItemSaleInfo);
+                    Database.SaleInfoRepository.Update(updateItemSaleInfo);
 
                     var updateMapperClient = new MapperConfiguration(cfg => cfg.CreateMap<SaleInfoDTO, Client>()
                         .ForMember("ClientId", opt => opt.MapFrom(s => s.ClientId))
                         .ForMember("Name", opt => opt.MapFrom(s => s.ClientName))).CreateMapper();
                     var updateItemClient = updateMapperClient.Map<SaleInfoDTO, Client>(item);
-                    Database.ClientRepository.Update2(updateItemClient);
+                    Database.ClientRepository.Update(updateItemClient);
 
                     var updateMapperProduct = new MapperConfiguration(cfg => cfg.CreateMap<SaleInfoDTO, Product>()
                         .ForMember("ProductId", opt => opt.MapFrom(s => s.ProductId))
                         .ForMember("Name", opt => opt.MapFrom(s => s.ProductName))
                         .ForMember("Price", opt => opt.MapFrom(s => s.ProductPrice))).CreateMapper();
                     var updateItemProduct = updateMapperProduct.Map<SaleInfoDTO, Product>(item);
-                    Database.ProductRepository.Update2(updateItemProduct);
+                    Database.ProductRepository.Update(updateItemProduct);
 
                     Database.Save();
                     transaction.Commit();
@@ -100,7 +100,7 @@ namespace BLL.Services
                 catch (Exception e)
                 {
                     transaction.Rollback();
-                    throw new Exception(e.Source + " : Crash in BLLService from SaleInfo: ");
+                    throw new Exception(e.Source + " : Crash in BLLService from UpdateSaleInfo");
                 }
             }
         }

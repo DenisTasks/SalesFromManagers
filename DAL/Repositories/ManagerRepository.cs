@@ -43,7 +43,7 @@ namespace DAL.Repositories
         {
             return _modelOfSalesContainer.ManagerSet.AsNoTracking();
         }
-        public void Update(DAL.Models.Manager itemManager)
+        public void Update(Model.Manager itemManager)
         {
             Model.Manager manager =
                 this._modelOfSalesContainer.ManagerSet.FirstOrDefault(m => m.ManagerId == itemManager.ManagerId);
@@ -56,35 +56,7 @@ namespace DAL.Repositories
                 throw new ArgumentException("This manager ID not found!");
             }
         }
-
-        public void Update2(Model.Manager itemManager)
-        {
-            Model.Manager manager =
-                this._modelOfSalesContainer.ManagerSet.FirstOrDefault(m => m.ManagerId == itemManager.ManagerId);
-            if (manager != null)
-            {
-                manager.LastName = itemManager.LastName;
-            }
-            else
-            {
-                throw new ArgumentException("This manager ID not found!");
-            }
-        }
-        public void Delete(DAL.Models.Manager itemManager)
-        {
-            Model.Manager manager =
-                _modelOfSalesContainer.ManagerSet.FirstOrDefault(m => m.ManagerId == itemManager.ManagerId);
-            if (manager != null)
-            {
-                _modelOfSalesContainer.ManagerSet.Remove(manager);
-            }
-            else
-            {
-                throw new ArgumentException("This manager ID not found!");
-            }
-        }
-
-        public void Delete2(Model.Manager itemManager)
+        public void Delete(Model.Manager itemManager)
         {
             Model.Manager manager =
                 _modelOfSalesContainer.ManagerSet.FirstOrDefault(m => m.ManagerId == itemManager.ManagerId);

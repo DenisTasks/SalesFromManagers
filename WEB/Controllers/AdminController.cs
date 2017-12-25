@@ -21,8 +21,20 @@ namespace IdentityApp.Controllers
         // GET: Admin
         public ActionResult Details(int id)
         {
-            var details = _service.FindSaleInfoById(id);
-            var chartInfo = _service.GetChartInfo(details);
+            SaleInfoDTO details;
+            ChartInfo chartInfo;
+            using (_service)
+            {
+                try
+                {
+                    details = _service.FindSaleInfoById(id);
+                    chartInfo = _service.GetChartInfo(details);
+                }
+                catch (Exception)
+                {
+                    return View("Error");
+                }
+            }
 
             ViewBag.Products = chartInfo.Products;
             ViewBag.Count = chartInfo.Count;
@@ -33,24 +45,54 @@ namespace IdentityApp.Controllers
 
         public ActionResult Delete(int id)
         {
-            var delete = _service.FindSaleInfoById(id);
-            return View(delete);
+            SaleInfoDTO deleteItem;
+            using (_service)
+            {
+                try
+                {
+                    deleteItem = _service.FindSaleInfoById(id);
+                }
+                catch (Exception)
+                {
+                    return View("Error");
+                }
+            }
+            return View(deleteItem);
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            _service.DeleteSaleInfoById(id);
+            using (_service)
+            {
+                try
+                {
+                    _service.DeleteSaleInfoById(id);
+                }
+                catch (Exception)
+                {
+                    return View("Error");
+                }
+            }
             return RedirectToAction("Statistics", "Home");
         }
 
-
-
         public ActionResult Edit(int id)
         {
-            var edit = _service.FindSaleInfoById(id);
-            return View(edit);
+            SaleInfoDTO editItem;
+            using (_service)
+            {
+                try
+                {
+                    editItem = _service.FindSaleInfoById(id);
+                }
+                catch (Exception)
+                {
+                    return View("Error");
+                }
+            }
+            return View(editItem);
         }
 
         [HttpPost]
@@ -72,11 +114,8 @@ namespace IdentityApp.Controllers
             return View(item);
         }
 
-
-
         public JsonResult ValidateDate(string DateOfSale)
         {
-            //var result = DateTime.ParseExact(dateString, format, CultureInfo.InvariantCulture);
             DateTime parsedDate;
             if (!DateTime.TryParse(DateOfSale, out parsedDate))
             {

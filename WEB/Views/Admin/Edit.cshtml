@@ -70,3 +70,8 @@
     @Html.ActionLink("Delete", "Delete", "Admin", new { id = Model.SaleInfoId }, null) |
     @Html.ActionLink("Back to List", "Statistics", "Home")
 </div>
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryVal")
+}
