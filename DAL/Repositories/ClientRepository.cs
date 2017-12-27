@@ -9,7 +9,7 @@ using DAL.Interfaces;
 
 namespace DAL.Repositories
 {
-    public class ClientRepository : GenericRepository, ICreateRepository<DAL.Models.Client, Model.Client>
+    public class ClientRepository : GenericRepository<ModelOfSalesContainer, Client>, ICreateRepository<DAL.Models.Client, Client>
     {
         public ClientRepository(ModelOfSalesContainer modelOfSalesContainer) : base(modelOfSalesContainer)
         {
@@ -17,32 +17,15 @@ namespace DAL.Repositories
 
         public void Create(DAL.Models.Client itemClient)
         {
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<DAL.Models.Client, Model.Client>()
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<DAL.Models.Client, Client>()
                 .ForMember("Name", opt => opt.MapFrom(c => c.Name))).CreateMapper();
-            Model.Client client = mapper.Map<DAL.Models.Client, Model.Client>(itemClient);
+            Client client = mapper.Map<DAL.Models.Client, Client>(itemClient);
             _modelOfSalesContainer.ClientSet.Add(client);
         }
 
-        public Model.Client FindById(int id)
+        public void Update(Client itemClient)
         {
-            Model.Client client = _modelOfSalesContainer.ClientSet.FirstOrDefault(x => x.ClientId == id);
-            return client;
-        }
-
-        public Model.Client FindByEntity(DAL.Models.Client itemClient)
-        {
-            return _modelOfSalesContainer.ClientSet.FirstOrDefault(c => c.Name == itemClient.Name);
-        }
-
-        public IEnumerable<Model.Client> Read()
-        {
-            return _modelOfSalesContainer.ClientSet;
-        }
-
-        public void Update(Model.Client itemClient)
-        {
-            Model.Client client =
-                this._modelOfSalesContainer.ClientSet.FirstOrDefault(c => c.ClientId == itemClient.ClientId);
+            Client client = FindBy(c => c.ClientId == itemClient.ClientId);
             if (client != null)
             {
                 client.Name = itemClient.Name;
@@ -51,25 +34,6 @@ namespace DAL.Repositories
             {
                 throw new ArgumentException("This client ID not found!");
             }
-        }
-
-        public void Delete(Model.Client itemClient)
-        {
-            Model.Client client =
-                _modelOfSalesContainer.ClientSet.FirstOrDefault(c => c.ClientId == itemClient.ClientId);
-            if (client != null)
-            {
-                _modelOfSalesContainer.ClientSet.Remove(client);
-            }
-            else
-            {
-                throw new ArgumentException("This client ID not found!");
-            }
-        }
-
-        public void SaveChanges()
-        {
-            _modelOfSalesContainer.SaveChanges();
         }
     }
 }

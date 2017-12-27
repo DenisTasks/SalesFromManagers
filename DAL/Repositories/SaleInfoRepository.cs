@@ -9,7 +9,7 @@ using DAL.Interfaces;
 
 namespace DAL.Repositories
 {
-    public class SaleInfoRepository : GenericRepository, ICreateRepository<DAL.Models.SaleInfo, Model.SaleInfo>
+    public class SaleInfoRepository : GenericRepository<ModelOfSalesContainer, SaleInfo>, ICreateRepository<DAL.Models.SaleInfo, SaleInfo>
     {
         public SaleInfoRepository(ModelOfSalesContainer modelOfSalesContainer) : base(modelOfSalesContainer)
         {
@@ -17,35 +17,18 @@ namespace DAL.Repositories
 
         public void Create(DAL.Models.SaleInfo itemSaleInfo)
         {
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<DAL.Models.SaleInfo, Model.SaleInfo>()
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<DAL.Models.SaleInfo, SaleInfo>()
                 .ForMember("ProductId", opt => opt.MapFrom(s => s.ProductId))
                 .ForMember("ClientId", opt => opt.MapFrom(s => s.ClientId))
                 .ForMember("ManagerId", opt => opt.MapFrom(s => s.ManagerId))
                 .ForMember("DateOfSale", opt => opt.MapFrom(s => s.DateOfSale))).CreateMapper();
-            Model.SaleInfo saleInfo = mapper.Map<DAL.Models.SaleInfo, Model.SaleInfo>(itemSaleInfo);
+            SaleInfo saleInfo = mapper.Map<DAL.Models.SaleInfo, SaleInfo>(itemSaleInfo);
             _modelOfSalesContainer.SaleInfoSet.Add(saleInfo);
         }
 
-        public Model.SaleInfo FindById(int id)
+        public void Update(SaleInfo itemSaleInfo)
         {
-            Model.SaleInfo saleInfo = _modelOfSalesContainer.SaleInfoSet.FirstOrDefault(x => x.SaleInfoId == id);
-            return saleInfo;
-        }
-
-        public Model.SaleInfo FindByEntity(DAL.Models.SaleInfo itemSaleInfo)
-        {
-            return _modelOfSalesContainer.SaleInfoSet.FirstOrDefault(x => x.SaleInfoId == itemSaleInfo.SaleInfoId);
-        }
-
-        public IEnumerable<Model.SaleInfo> Read()
-        {
-            return _modelOfSalesContainer.SaleInfoSet;
-        }
-
-        public void Update(Model.SaleInfo itemSaleInfo)
-        {
-            Model.SaleInfo saleInfo =
-                this._modelOfSalesContainer.SaleInfoSet.FirstOrDefault(s => s.SaleInfoId == itemSaleInfo.SaleInfoId);
+            SaleInfo saleInfo = FindBy(s => s.SaleInfoId == itemSaleInfo.SaleInfoId);
             if (saleInfo != null)
             {
                 saleInfo.DateOfSale = itemSaleInfo.DateOfSale;
@@ -54,24 +37,6 @@ namespace DAL.Repositories
             {
                 throw new ArgumentException("This information of sale ID not found!");
             }
-        }
-
-        public void Delete(Model.SaleInfo itemSaleInfo)
-        {
-            Model.SaleInfo saleInfo =
-                _modelOfSalesContainer.SaleInfoSet.FirstOrDefault(s => s.SaleInfoId == itemSaleInfo.SaleInfoId);
-            if (saleInfo != null)
-            {
-                _modelOfSalesContainer.SaleInfoSet.Remove(saleInfo);
-            }
-            else
-            {
-                throw new ArgumentException("This information of sale ID not found!");
-            }
-        }
-        public void SaveChanges()
-        {
-            _modelOfSalesContainer.SaveChanges();
         }
     }
 }

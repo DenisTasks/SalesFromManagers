@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,11 +12,9 @@ namespace DAL.Interfaces
         where TOut : class
     {
         void Create(TIn item);
-        TOut FindById(int id);
-        TOut FindByEntity(TIn item);
         IEnumerable<TOut> Read();
         void Update(TOut item);
         void Delete(TOut item);
-        void SaveChanges();
+        TOut FindBy(Expression<Func<TOut, bool>> predicate);
     }
 }

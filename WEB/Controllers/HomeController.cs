@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
+
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using BLL.DTO;
 using BLL.Interfaces;
-using IdentityApp.App_Start;
 using IdentityApp.Models;
 using IdentityApp.Utils;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
 
 namespace IdentityApp.Controllers
 {
@@ -30,55 +26,49 @@ namespace IdentityApp.Controllers
         [Authorize]
         public ActionResult Statistics()
         {
-            using (_service)
+            try
             {
-                try
-                {
-                    _filterView = new FilterViewModel(_service.GetSaleInfo());
-                }
-                catch (Exception)
-                {
-                    return View("Error");
-                }
+                _filterView = new FilterViewModel(_service.GetSaleInfo());
+            }
+            catch (Exception)
+            {
+                return View("Error");
             }
             return View(_filterView);
         }
 
         public PartialViewResult UpdateSaleInfoTable(string managerName, string dateOfSale, string productName)
         {
-            using (_service)
+            try
             {
-                try
+                IQueryable<SaleInfoDTO> saleInfo = _service.GetSaleInfo().AsQueryable();
+                #region Filtering
+                if (!String.IsNullOrEmpty(managerName) && !managerName.Equals("All"))
                 {
-                    IQueryable<SaleInfoDTO> saleInfo = _service.GetSaleInfo().AsQueryable();
-                    #region Filtering
-                    if (!String.IsNullOrEmpty(managerName) && !managerName.Equals("All"))
-                    {
-                        saleInfo = saleInfo.Where(m => m.ManagerName == managerName);
-                    }
-                    if (!String.IsNullOrEmpty(dateOfSale) && !dateOfSale.Equals("All"))
-                    {
-                        saleInfo = saleInfo.Where(d => d.DateOfSale == dateOfSale);
-                    }
-                    if (!String.IsNullOrEmpty(productName) && !productName.Equals("All"))
-                    {
-                        saleInfo = saleInfo.Where(p => p.ProductName == productName);
-                    }
-                    _filterView = new FilterViewModel(saleInfo);
-                    #endregion
-                    string message = $"You see filter sale info by manager {managerName}, date {dateOfSale}, product {productName}";
-                    if (managerName == "All" && dateOfSale == "All" && productName == "All")
-                    {
-                        message = string.Empty;
-                    }
-                    SendMessageAboutFilter(message);
+                    saleInfo = saleInfo.Where(m => m.ManagerName == managerName);
                 }
-                catch (Exception)
+                if (!String.IsNullOrEmpty(dateOfSale) && !dateOfSale.Equals("All"))
                 {
-                    return PartialView("Error");
+                    saleInfo = saleInfo.Where(d => d.DateOfSale == dateOfSale);
                 }
-
+                if (!String.IsNullOrEmpty(productName) && !productName.Equals("All"))
+                {
+                    saleInfo = saleInfo.Where(p => p.ProductName == productName);
+                }
+                _filterView = new FilterViewModel(saleInfo);
+                #endregion
+                string message = $"You see filter sale info by manager {managerName}, date {dateOfSale}, product {productName}";
+                if (managerName == "All" && dateOfSale == "All" && productName == "All")
+                {
+                    message = string.Empty;
+                }
+                SendMessageAboutFilter(message);
             }
+            catch (Exception)
+            {
+                return PartialView("Error");
+            }
+
             return PartialView(_filterView);
         }
 
@@ -86,6 +76,12 @@ namespace IdentityApp.Controllers
         {
             var context = Microsoft.AspNet.SignalR.GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
             context.Clients.All.displayMessage(message);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            _service.Dispose();
+            base.Dispose(disposing);
         }
     }
 }

@@ -10,7 +10,7 @@ using DAL.Interfaces;
 
 namespace DAL.Repositories
 {
-    public class ManagerRepository : GenericRepository, ICreateRepository<DAL.Models.Manager, Model.Manager>
+    public class ManagerRepository : GenericRepository<ModelOfSalesContainer, Manager>, ICreateRepository<DAL.Models.Manager, Manager>
     {
         public ManagerRepository(ModelOfSalesContainer modelOfSalesContainer) : base(modelOfSalesContainer)
         {
@@ -18,35 +18,15 @@ namespace DAL.Repositories
 
         public void Create(DAL.Models.Manager itemManager)
         {
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<DAL.Models.Manager, Model.Manager>()
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<DAL.Models.Manager, Manager>()
                 .ForMember("LastName", opt => opt.MapFrom(m => m.LastName))).CreateMapper();
-            Model.Manager manager = mapper.Map<DAL.Models.Manager, Model.Manager>(itemManager);
+            Manager manager = mapper.Map<DAL.Models.Manager, Manager>(itemManager);
             _modelOfSalesContainer.ManagerSet.Add(manager);
         }
 
-        public Model.Manager FindById(int id)
+        public void Update(Manager itemManager)
         {
-            Model.Manager manager = _modelOfSalesContainer.ManagerSet.FirstOrDefault(x => x.ManagerId == id);
-            return manager;
-        }
-
-        public Model.Manager FindByEntity(DAL.Models.Manager itemManager)
-        {
-            return _modelOfSalesContainer.ManagerSet.FirstOrDefault(m => m.LastName == itemManager.LastName);
-        }
-
-        public IEnumerable<Model.Manager> FindByEntityName(string lastName)
-        {
-            return _modelOfSalesContainer.ManagerSet.Where(x => x.LastName == lastName);
-        }
-        public IEnumerable<Model.Manager> Read()
-        {
-            return _modelOfSalesContainer.ManagerSet.AsNoTracking();
-        }
-        public void Update(Model.Manager itemManager)
-        {
-            Model.Manager manager =
-                this._modelOfSalesContainer.ManagerSet.FirstOrDefault(m => m.ManagerId == itemManager.ManagerId);
+            Manager manager = FindBy(m => m.ManagerId == itemManager.ManagerId);
             if (manager != null)
             {
                 manager.LastName = itemManager.LastName;
@@ -55,23 +35,6 @@ namespace DAL.Repositories
             {
                 throw new ArgumentException("This manager ID not found!");
             }
-        }
-        public void Delete(Model.Manager itemManager)
-        {
-            Model.Manager manager =
-                _modelOfSalesContainer.ManagerSet.FirstOrDefault(m => m.ManagerId == itemManager.ManagerId);
-            if (manager != null)
-            {
-                _modelOfSalesContainer.ManagerSet.Remove(manager);
-            }
-            else
-            {
-                throw new ArgumentException("This manager ID not found!");
-            }
-        }
-        public void SaveChanges()
-        {
-            _modelOfSalesContainer.SaveChanges();
         }
     }
 }

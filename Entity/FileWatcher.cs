@@ -55,11 +55,27 @@ namespace Entity
                 Console.WriteLine(exception.Message);
             }
         }
+        private bool disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    _watcher.Created -= OnChanged;
+                    _watcher.Changed -= OnChanged;
+                    _watcher.Dispose();
+                    _watcherTask.Dispose();
+                }
+            }
+            this.disposed = true;
+        }
+
         public void Dispose()
         {
-            _watcher.Created -= OnChanged;
-            _watcher.Changed -= OnChanged;
-            _watcher.Dispose();
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

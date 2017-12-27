@@ -1,9 +1,6 @@
 ﻿using BLL.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using BLL.DTO;
 
@@ -23,17 +20,14 @@ namespace IdentityApp.Controllers
         {
             SaleInfoDTO details;
             ChartInfo chartInfo;
-            using (_service)
+            try
             {
-                try
-                {
-                    details = _service.FindSaleInfoById(id);
-                    chartInfo = _service.GetChartInfo(details);
-                }
-                catch (Exception)
-                {
-                    return View("Error");
-                }
+                details = _service.FindSaleInfoById(id);
+                chartInfo = _service.GetChartInfo(details);
+            }
+            catch (Exception)
+            {
+                return View("Error");
             }
 
             ViewBag.Products = chartInfo.Products;
@@ -46,16 +40,13 @@ namespace IdentityApp.Controllers
         public ActionResult Delete(int id)
         {
             SaleInfoDTO deleteItem;
-            using (_service)
+            try
             {
-                try
-                {
-                    deleteItem = _service.FindSaleInfoById(id);
-                }
-                catch (Exception)
-                {
-                    return View("Error");
-                }
+                deleteItem = _service.FindSaleInfoById(id);
+            }
+            catch (Exception)
+            {
+                return View("Error");
             }
             return View(deleteItem);
         }
@@ -64,16 +55,13 @@ namespace IdentityApp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            using (_service)
+            try
             {
-                try
-                {
-                    _service.DeleteSaleInfoById(id);
-                }
-                catch (Exception)
-                {
-                    return View("Error");
-                }
+                _service.DeleteSaleInfoById(id);
+            }
+            catch (Exception)
+            {
+                return View("Error");
             }
             return RedirectToAction("Statistics", "Home");
         }
@@ -81,16 +69,13 @@ namespace IdentityApp.Controllers
         public ActionResult Edit(int id)
         {
             SaleInfoDTO editItem;
-            using (_service)
+            try
             {
-                try
-                {
-                    editItem = _service.FindSaleInfoById(id);
-                }
-                catch (Exception)
-                {
-                    return View("Error");
-                }
+                editItem = _service.FindSaleInfoById(id);
+            }
+            catch (Exception)
+            {
+                return View("Error");
             }
             return View(editItem);
         }
@@ -123,6 +108,12 @@ namespace IdentityApp.Controllers
                     JsonRequestBehavior.AllowGet);
             }
             return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            _service.Dispose();
+            base.Dispose(disposing);
         }
     }
 }

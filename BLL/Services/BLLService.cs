@@ -44,7 +44,7 @@ namespace BLL.Services
                 .ForMember("ProductPrice", opt => opt.MapFrom(s => s.Product.Price))
                 .ForMember("ClientName", opt => opt.MapFrom(s => s.Client.Name))
                 .ForMember("ManagerName", opt => opt.MapFrom(s => s.Manager.LastName))).CreateMapper();
-            return saleInfoMapper.Map<SaleInfo, SaleInfoDTO>(Database.SaleInfoRepository.FindById(id));
+            return saleInfoMapper.Map<SaleInfo, SaleInfoDTO>(Database.SaleInfoRepository.FindBy(x => x.SaleInfoId == id));
         }
 
         public void DeleteSaleInfoById(int id)
@@ -53,7 +53,7 @@ namespace BLL.Services
             {
                 try
                 {
-                    var deleteItem = Database.SaleInfoRepository.FindById(id);
+                    var deleteItem = Database.SaleInfoRepository.FindBy(x => x.SaleInfoId == id);
                     Database.SaleInfoRepository.Delete(deleteItem);
                     Database.Save();
                     transaction.Commit();
@@ -121,9 +121,24 @@ namespace BLL.Services
             return chartInfo;
         }
 
+        private bool disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    Database.Dispose();
+                }
+            }
+            this.disposed = true;
+        }
+
         public void Dispose()
         {
-            Database.Dispose();
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

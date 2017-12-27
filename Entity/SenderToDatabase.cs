@@ -27,12 +27,12 @@ namespace Entity
                         try
                         {
                             DAL.Models.Manager newManager = new DAL.Models.Manager { LastName = managerLastName };
-                            Model.Manager manager = _unitOfWork.ManagerRepository.FindByEntity(newManager);
+                            Model.Manager manager = _unitOfWork.ManagerRepository.FindBy(m => m.LastName == newManager.LastName);
                             if (manager == null)
                             {
                                 _unitOfWork.ManagerRepository.Create(newManager);
                                 _unitOfWork.Save();
-                                manager = _unitOfWork.ManagerRepository.FindByEntity(newManager);
+                                manager = _unitOfWork.ManagerRepository.FindBy(m => m.LastName == newManager.LastName);
                             }
 
                             DAL.Models.Product newProduct = new DAL.Models.Product { Name = item.Product, Price = item.Price };
@@ -43,8 +43,8 @@ namespace Entity
 
                             _unitOfWork.Save();
 
-                            Model.Product product = _unitOfWork.ProductRepository.FindByEntity(newProduct);
-                            Model.Client client = _unitOfWork.ClientRepository.FindByEntity(newClient);
+                            Model.Product product = _unitOfWork.ProductRepository.FindBy(p => p.Name == newProduct.Name);
+                            Model.Client client = _unitOfWork.ClientRepository.FindBy(c => c.Name == newClient.Name);
 
                             DAL.Models.SaleInfo newSaleInfo = new DAL.Models.SaleInfo
                             {

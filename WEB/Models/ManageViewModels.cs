@@ -5,7 +5,7 @@ using Microsoft.Owin.Security;
 
 namespace IdentityApp.Models
 {
-    public class IndexViewModel
+    public class IndexModel
     {
         public bool HasPassword { get; set; }
         public IList<UserLoginInfo> Logins { get; set; }
