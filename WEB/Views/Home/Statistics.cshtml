@@ -1,4 +1,6 @@
-﻿@model IdentityApp.Models.FilterViewModel
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model IdentityApp.Models.FilterViewModel
 
 @{
     ViewBag.Title = "Statistics";
@@ -24,28 +26,9 @@
         <input type="reset" value="Reset" class="btn btn-default" />
     </div>
 }
-
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Product Name</th>
-            <th>Product Price</th>
-            <th>Client Name</th>
-            <th>Manager Name</th>
-            <th>Date Of Sale</th>
-        </tr>
-    </thead>
-
-    <tbody id="saleInfoAjax">
-        @Html.Action("UpdateSaleInfoTable", new
-{
-    managerName = "All",
-    dateOfSale = "All",
-    productName = "All"
-})
-    </tbody>
-</table>
+<div id="saleInfoAjax">
+       @Html.Partial("UpdateSaleInfoTable")
+</div>
 
 @section scripts
 {

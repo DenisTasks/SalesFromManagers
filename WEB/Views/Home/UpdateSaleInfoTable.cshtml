@@ -1,33 +1,56 @@
-﻿@model IdentityApp.Models.FilterViewModel
-
-@foreach (var item in Model.SaleInfo)
-{
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.SaleInfoId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ProductName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ProductPrice)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ClientName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ManagerName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DateOfSale)
-        </td>
-        @if (User.IsInRole("Admin"))
-        {
-            <td>
-                @Html.ActionLink("Edit", "Edit", "Admin", new { id = item.SaleInfoId }, null) |
-                @Html.ActionLink("Details", "Details", "Admin", new { id = item.SaleInfoId }, null) |
-                @Html.ActionLink("Delete", "Delete", "Admin", new { id = item.SaleInfoId }, null)
-            </td>
-        }
-    </tr>
+﻿@using PagedList
+@using PagedList.Mvc
+@model IdentityApp.Models.FilterViewModel
+@{
+    string localManagerName = ViewBag.ManagerName;
+    string localDateOfSale = ViewBag.DateOfSale;
+    string localProductName = ViewBag.ProductName;
 }
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Product Name</th>
+            <th>Product Price</th>
+            <th>Client Name</th>
+            <th>Manager Name</th>
+            <th>Date Of Sale</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Result)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SaleInfoId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductPrice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ClientName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ManagerName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateOfSale)
+                </td>
+                @if (User.IsInRole("Admin"))
+                {
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", "Admin", new { id = item.SaleInfoId }, null) |
+                        @Html.ActionLink("Details", "Details", "Admin", new { id = item.SaleInfoId }, null) |
+                        @Html.ActionLink("Delete", "Delete", "Admin", new { id = item.SaleInfoId }, null)
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+@Html.PagedListPager(Model.Result, page => Url.Action("UpdateSaleInfoTable", 
+    new {managerName = localManagerName, dateOfSale = localDateOfSale, productName = localProductName, page }),
+    PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "saleInfoAjax" }))

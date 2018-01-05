@@ -4,17 +4,24 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using BLL.DTO;
+using PagedList;
 
 namespace IdentityApp.Models
 {
     public class FilterViewModel
     {
+        public IPagedList<SaleInfoDTO> Result { get; set; }
+        public IEnumerable<SaleInfoDTO> SaleInfo { get; set; }
+        public SelectList Managers { get; set; }
+        public SelectList DatesOfSale { get; set; }
+        public SelectList Products { get; set; }
         private List<string> _managers;
         private List<string> _products;
         private List<string> _datesOfSale;
         public FilterViewModel(IEnumerable<SaleInfoDTO> saleInfo)
         {
             SaleInfo = saleInfo;
+            //Result = SaleInfo.ToPagedList(1, 3);
             Initialize(saleInfo);
             Managers = new SelectList(_managers);
             Products = new SelectList(_products);
@@ -48,9 +55,5 @@ namespace IdentityApp.Models
             _managers.Sort();
             _products.Sort();
         }
-        public IEnumerable<SaleInfoDTO> SaleInfo { get; set; }
-        public SelectList Managers { get; set; }
-        public SelectList DatesOfSale { get; set; }
-        public SelectList Products { get; set; }
     }
 }
