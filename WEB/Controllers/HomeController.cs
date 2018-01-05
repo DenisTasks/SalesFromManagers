@@ -38,7 +38,7 @@ namespace IdentityApp.Controllers
             }
             _filterView.Result = _filterView.SaleInfo.ToPagedList(pageNumber, pageSize);
             return Request.IsAjaxRequest()
-                ? (ActionResult) PartialView("UpdateSaleInfo", _filterView)
+                ? (ActionResult) PartialView("UpdateSaleInfoTable", _filterView)
                 : View(_filterView);
         }
 
