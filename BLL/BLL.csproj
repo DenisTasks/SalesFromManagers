@@ -88,6 +88,7 @@
   <ItemGroup>
     <Compile Include="DTO\ChartInfo.cs" />
     <Compile Include="DTO\SaleInfoDTO.cs" />
+    <Compile Include="DTO\SelectLists.cs" />
     <Compile Include="Interfaces\IBLLService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\BLLService.cs" />

@@ -32,6 +32,11 @@ namespace DAL.Repositories
             return _entities.Set<T>();
         }
 
+        public virtual IEnumerable<T> Read(Expression<Func<T, int>> predicate, int skipItems, int takeItems)
+        {
+            return _entities.Set<T>().OrderBy(predicate).Skip(skipItems).Take(takeItems).ToList();
+        }
+
         public virtual T FindBy(Expression<Func<T, bool>> predicate)
         {
             T saleInfo = _entities.Set<T>().FirstOrDefault(predicate);
@@ -50,6 +55,11 @@ namespace DAL.Repositories
             }
         }
 
+        public virtual IEnumerable<T> Distinct(Expression<Func<T, string>> predicate)
+        {
+            var items = _entities.Set<T>().GroupBy(predicate).Select(x => x.FirstOrDefault()).ToList();
+            return items;
+        }
         public virtual void SaveChanges()
         {
             _entities.SaveChanges();

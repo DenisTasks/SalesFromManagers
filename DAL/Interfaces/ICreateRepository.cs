@@ -12,7 +12,9 @@ namespace DAL.Interfaces
         where TOut : class
     {
         void Create(TIn item);
+        IEnumerable<TOut> Distinct(Expression<Func<TOut, string>> predicate);
         IEnumerable<TOut> Read();
+        IEnumerable<TOut> Read(Expression<Func<TOut, int>> predicate, int skipItems, int takeItems);
         void Update(TOut item);
         void Delete(TOut item);
         TOut FindBy(Expression<Func<TOut, bool>> predicate);

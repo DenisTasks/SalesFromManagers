@@ -35,6 +35,45 @@ namespace BLL.Services
             return saleInfoMapper.Map<IEnumerable<SaleInfo>, List<SaleInfoDTO>>(Database.SaleInfoRepository.Read());
         }
 
+        public IEnumerable<SaleInfoDTO> GetSaleInfo(int skipItems, int takeItems)
+        {
+            var saleInfoMapper = new MapperConfiguration(cfg => cfg.CreateMap<SaleInfo, SaleInfoDTO>()
+                .ForMember("SaleInfoId", opt => opt.MapFrom(s => s.SaleInfoId))
+                .ForMember("DateOfSale", opt => opt.MapFrom(s => s.DateOfSale))
+                .ForMember("ProductName", opt => opt.MapFrom(s => s.Product.Name))
+                .ForMember("ProductPrice", opt => opt.MapFrom(s => s.Product.Price))
+                .ForMember("ClientName", opt => opt.MapFrom(s => s.Client.Name))
+                .ForMember("ManagerName", opt => opt.MapFrom(s => s.Manager.LastName))).CreateMapper();
+            return saleInfoMapper.Map<IEnumerable<SaleInfo>, List<SaleInfoDTO>>(Database.SaleInfoRepository.Read(x => x.SaleInfoId, skipItems, takeItems));
+        }
+
+        public SelectLists DistinctItems()
+        {
+            List<string> managersList = new List<string>();
+            List<string> dateOfSalesList = new List<string>();
+            List<string> productsList = new List<string>();
+
+            var managers = Database.ManagerRepository.Distinct(x => x.LastName);
+            foreach (var item in managers)
+            {
+                managersList.Add(item.LastName);
+            }
+
+            var dateOfSales = Database.SaleInfoRepository.Distinct(x => x.DateOfSale);
+            foreach (var item in dateOfSales)
+            {
+                dateOfSalesList.Add(item.DateOfSale);
+            }
+
+            var products = Database.ProductRepository.Distinct(x => x.Name);
+            foreach (var item in products)
+            {
+                productsList.Add(item.Name);
+            }
+
+            var distinctItems = new SelectLists(managersList, dateOfSalesList, productsList);
+            return distinctItems;
+        }
         public SaleInfoDTO FindSaleInfoById(int id)
         {
             var saleInfoMapper = new MapperConfiguration(cfg => cfg.CreateMap<SaleInfo, SaleInfoDTO>()
