@@ -41,7 +41,7 @@ namespace IdentityApp.Controllers
                 {
                     pagingList.Add(i);
                 }
-                _filterView.Result = pagingList.ToPagedList(pageNumber, pageSize);
+                _filterView.ListPager = pagingList.ToPagedList(pageNumber, pageSize);
 
                 // заполнение фильтра уникальными менеджерами/датами/продуктами
                 SelectLists distinctItems = _service.DistinctItems();
@@ -59,16 +59,17 @@ namespace IdentityApp.Controllers
         public PartialViewResult UpdateSaleInfoTable(string managerName, string dateOfSale, string productName, int? page)
         {
             int pageSize = 10;
+            int pageNumber = page ?? 1;
+
             ViewBag.ManagerName = managerName;
             ViewBag.DateOfSale = dateOfSale;
             ViewBag.ProductName = productName;
             try
             {
                 IQueryable<SaleInfoDTO> saleInfo;
-                if (page > 0)
+                if (page > 0 && managerName == null && dateOfSale == null && productName == null
+                    || managerName.Equals("All") && dateOfSale.Equals("All") && productName.Equals("All"))
                 {
-                    int pageNumber = page ?? 1;
-
                     saleInfo = _service.GetSaleInfo(((pageNumber - 1) * pageSize), pageSize).AsQueryable();
                     _filterView = new FilterViewModel(saleInfo);
 
@@ -78,10 +79,15 @@ namespace IdentityApp.Controllers
                     {
                         pagingList.Add(i);
                     }
-                    _filterView.Result = pagingList.ToPagedList(pageNumber, pageSize);
+                    _filterView.ListPager = pagingList.ToPagedList(pageNumber, pageSize);
+
+                    string message = string.Empty;
+                    SendMessageAboutFilter(message);
                 }
+                // обработка submit
                 else
                 {
+                    pageSize = 5;
                     saleInfo = _service.GetSaleInfo().AsQueryable();
                     #region Filtering
                     if (!String.IsNullOrEmpty(managerName) && !managerName.Equals("All"))
@@ -99,17 +105,14 @@ namespace IdentityApp.Controllers
                     _filterView = new FilterViewModel(saleInfo);
                     #endregion
 
-                    int count = 0;
-                    foreach (var item in _filterView.SaleInfo)
-                    {
-                        count++;
-                    }
+                    int count = _filterView.SaleInfo.ToList().Count;
                     List<int> pagingList = new List<int>();
                     for (int i = 1; i < count; i++)
                     {
                         pagingList.Add(i);
                     }
-                    _filterView.Result = pagingList.ToPagedList(1, 5);
+                    _filterView.ListPager = pagingList.ToPagedList(pageNumber, pageSize);
+                    _filterView.SaleInfo = _filterView.SaleInfo.Skip((pageNumber - 1) * pageSize).Take(pageSize);
 
                     string message = $"You see filter sale info by manager {managerName}, date {dateOfSale}, product {productName}";
                     if (managerName == "All" && dateOfSale == "All" && productName == "All")

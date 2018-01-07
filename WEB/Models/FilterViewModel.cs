@@ -13,7 +13,7 @@ namespace IdentityApp.Models
         public SelectList Managers { get; set; }
         public SelectList DatesOfSale { get; set; }
         public SelectList Products { get; set; }
-        public IPagedList<int> Result { get; set; }
+        public IPagedList<int> ListPager { get; set; }
         public IEnumerable<SaleInfoDTO> SaleInfo { get; set; }
         public FilterViewModel(IEnumerable<SaleInfoDTO> saleInfo)
         {

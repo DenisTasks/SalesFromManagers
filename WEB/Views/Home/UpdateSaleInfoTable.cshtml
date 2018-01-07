@@ -50,6 +50,6 @@
         }
     </tbody>
 </table>
-@Html.PagedListPager(Model.Result, page => Url.Action("UpdateSaleInfoTable", 
+@Html.PagedListPager(Model.ListPager, page => Url.Action("UpdateSaleInfoTable",
     new {managerName = localManagerName, dateOfSale = localDateOfSale, productName = localProductName, page }),
     PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "saleInfoAjax" }))
