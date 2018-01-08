@@ -31,10 +31,8 @@ namespace IdentityApp.Controllers
             int pageSize = 10;
             try
             {
-                // отображение первой страницы
                 _filterView = new FilterViewModel(_service.GetSaleInfo(((pageNumber - 1) * pageSize), pageSize));
 
-                // отображение пагинатора на всю базу данных
                 int count = _service.GetSaleInfo().Count();
                 List<int> pagingList = new List<int>();
                 for (int i = 1; i < count; i++)
@@ -43,7 +41,6 @@ namespace IdentityApp.Controllers
                 }
                 _filterView.ListPager = pagingList.ToPagedList(pageNumber, pageSize);
 
-                // заполнение фильтра уникальными менеджерами/датами/продуктами
                 SelectLists distinctItems = _service.DistinctItems();
                 _filterView.Managers = new SelectList(distinctItems.Managers);
                 _filterView.DatesOfSale = new SelectList(distinctItems.DateOfSales);
@@ -84,7 +81,6 @@ namespace IdentityApp.Controllers
                     string message = string.Empty;
                     SendMessageAboutFilter(message);
                 }
-                // обработка submit
                 else
                 {
                     pageSize = 5;
